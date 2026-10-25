@@ -1,0 +1,26 @@
+{
+  "beam_generated": {
+    "accepted_total": 19878,
+    "train": 13292,
+    "validation": 3327,
+    "protected_test": 3259,
+    "protected_test_families": {
+      "operational_evidence_strength": 935,
+      "packing_readiness": 1146,
+      "warehouse_exception_routing": 1178
+    }
+  },
+  "typed_decisions": {
+    "train_cases": 960,
+    "train_decisions": 4800,
+    "validation_cases": 240,
+    "validation_decisions": 1200,
+    "official_test_cases": 400,
+    "official_test_decisions": 2000
+  },
+  "combined": {
+    "train_decisions": 18092,
+    "validation_decisions": 4527,
+    "separate_test_decisions": 5259
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "scotty_1": {
+    "beam_protected_holdout": {
+      "items": 3259,
+      "raw_accuracy": 0.830316047867444,
+      "position_balanced_accuracy": 0.763893546632213
+    },
+    "typed_official_test": {
+      "cases": 400,
+      "decisions": 2000,
+      "hard_accuracy": 0.7545,
+      "soft_teacher_agreement": 0.601953550368133,
+      "hard_accuracy_case_cluster_95pct_ci": [0.733, 0.776],
+      "raw_ece_15bin": 0.10925439357803929,
+      "ordinal_mae_hard_label": 0.305,
+      "ordinal_within_one_level": 0.97875
+    },
+    "latency": {
+      "hardware": "NVIDIA GB10",
+      "input": "one 350-token four-option validation item",
+      "batch_size": 1,
+      "precision": "BF16",
+      "model_only_median_ms": 22.21,
+      "model_only_p95_ms": 23.09,
+      "including_tokenization_median_ms": 23.36,
+      "including_tokenization_p95_ms": 23.64
+    }
+  },
+  "typed_only_matched_updates_control": {
+    "beam_protected_holdout": {
+      "raw_accuracy": 0.5634,
+      "position_balanced_accuracy": 0.5164
+    },
+    "typed_official_test": {
+      "hard_accuracy": 0.7835,
+      "soft_teacher_agreement": 0.6111
+    }
+  },
+  "laya_context": {
+    "released_root_measured_beam": {
+      "raw_accuracy": 0.5351,
+      "position_balanced_accuracy": 0.4856
+    },
+    "published_typed_root_accuracy": 0.362,
+    "published_typed_specialist_accuracy": 0.766,
+    "historical_local_finetuned_specialist_accuracy_not_root": 0.7485
+  }
+}

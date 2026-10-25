@@ -1,0 +1,37 @@
+{
+  "frozen_snapshot": {
+    "id": "beam-1-esann-2026-10-24-v1",
+    "created_utc": "2026-10-24T23:45:31.325898+00:00",
+    "files": 69,
+    "verified_non_checksum_files": 68
+  },
+  "model": {
+    "public_name": "Scotty-1",
+    "selected_checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
+    "checkpoint_in_git": false,
+    "base_model": "answerdotai/ModernBERT-large",
+    "base_revision": "45bb4654a4d5aaff24dd11d4781fa46d39bf8c13"
+  },
+  "data": {
+    "accepted_beam_corpus_sha256": "7e37e222dc7d819d4d7076b6bbf2672531034dc7104dbd539abc14299b7c5699",
+    "split_manifest_sha256": "697176dd0a737d38160c2cf3227c453b1de7e850db00b53aa5d361b13157095d",
+    "protected_beam_test_sha256": "30298aad191624cda56a83e1af54702b364c455a709387e61f9bc235ca3988b7",
+    "typed_decisions_revision": "468b1461d59e01d6404e1cf37431da962acd43a0",
+    "raw_rows_in_git": false,
+    "row_level_predictions_in_git": false
+  },
+  "paper": {
+    "original_beam_1_pdf_sha256": "7cfc073c8e55eb861b13715dec968e839f5f86f0a4241dc828fb38c5b70915b9",
+    "original_beam_1_source_zip_sha256": "1bbc49e339d8088cf537966aaf519cdf448c0574306966cd145a9d9a6faf148e",
+    "scotty_1_pdf_sha256": "62eda149b08633abbcf54ea0f95e3d6cefe5061dc51c233ff16a33f25d58b66c",
+    "scotty_1_source_zip_sha256": "91e2177eccdcda827af034e1607cc17fb6aabe1bcd19b8b89f8bf2a19b1a9daa",
+    "scotty_1_pages": 6
+  },
+  "excluded_from_git": [
+    "model checkpoints",
+    "raw datasets",
+    "row-level predictions",
+    "training and evaluation logs",
+    "machine-specific frozen manifests"
+  ]
+}
