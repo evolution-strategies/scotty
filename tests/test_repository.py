@@ -93,6 +93,18 @@ class RepositoryFactsTest(unittest.TestCase):
         self.assertIn("paper/scotty-1-paper.pdf", scope)
         self.assertIn("does **not** apply", scope)
 
+    def test_private_huggingface_hosting_record(self) -> None:
+        provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
+        hosting = provenance["hosting"]
+        self.assertEqual(hosting["huggingface_repo"], "DarwinGuru/scotty-1")
+        self.assertEqual(hosting["repo_type"], "model")
+        self.assertTrue(hosting["private"])
+        self.assertFalse(hosting["checkpoint_in_git"])
+        self.assertEqual(
+            hosting["checkpoint_sha256"],
+            provenance["model"]["selected_checkpoint_sha256"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

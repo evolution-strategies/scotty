@@ -38,14 +38,16 @@ BF16 autocast, full encoder fine-tuning, and gradient checkpointing.
 
 The selected checkpoint SHA-256 is
 `b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783`.
-Weights are not stored in this repository.
+Weights are not stored in Git. The complete checkpoint is hosted privately at
+[`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1), including
+the encoder and tokenizer files required by the Laya-format loader.
 
 ## Intended use
 
 Scotty-1 is a research artifact for studying compact, local, candidate-scoring
 decision interfaces. It is suitable for reproduction work and controlled
-experiments after the missing checkpoint and data have been obtained under
-appropriate terms.
+experiments after the private checkpoint and separate data have been obtained
+under appropriate terms.
 
 It is not a calibrated autonomous decision-maker. Deployment needs domain
 review, threshold calibration, logging, validated escalation, and checks for

@@ -12,6 +12,14 @@
     "base_model": "answerdotai/ModernBERT-large",
     "base_revision": "45bb4654a4d5aaff24dd11d4781fa46d39bf8c13"
   },
+  "hosting": {
+    "huggingface_repo": "DarwinGuru/scotty-1",
+    "repo_type": "model",
+    "private": true,
+    "checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
+    "checkpoint_in_git": false,
+    "verified_huggingface_commit": "59347d6bc1702419560e779a4dbf2aa9ccc0a055"
+  },
   "data": {
     "accepted_beam_corpus_sha256": "7e37e222dc7d819d4d7076b6bbf2672531034dc7104dbd539abc14299b7c5699",
     "split_manifest_sha256": "697176dd0a737d38160c2cf3227c453b1de7e850db00b53aa5d361b13157095d",

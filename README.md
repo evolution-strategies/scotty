@@ -7,8 +7,18 @@ initialized Laya-format typed head. It does **not** load pretrained Laya weights
 
 This private research repository packages the paper, frozen aggregate evidence,
 model and training configuration, and the source that was available at freeze
-time. Large checkpoints, raw datasets, and row-level predictions are deliberately
-excluded. Their identities are recorded by hash in [`provenance/artifacts.json`](provenance/artifacts.json).
+time. Raw datasets and row-level predictions are deliberately excluded. Their
+identities are recorded by hash in [`provenance/artifacts.json`](provenance/artifacts.json).
+
+## Complete model checkpoint on Hugging Face
+
+**The complete verified Scotty-1 checkpoint is hosted at
+[`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1).** The model
+repository is private today, so access requires authorization for that Hugging
+Face account. It contains the weights, encoder configuration, agent
+configuration, tokenizer, model card, and Apache-2.0 license. The weights stay
+out of Git history while the repository remains easy to make public later with
+an explicit release decision.
 
 ## Headline results
 
@@ -62,20 +72,27 @@ python3 -m unittest discover -s tests -v
 python3 tools/show_results.py
 ```
 
-Training, checkpoint inference, and full evaluation still need the excluded
-checkpoint and hashed datasets. Follow
+Training and full evaluation still need the hashed datasets. Checkpoint
+inference uses the privately hosted Hugging Face model. Follow
 [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md); source and syntax paths are verified,
 but packaging did not rerun training or checkpoint inference.
 
-## Use an authorized local checkpoint
+## Download and use the private checkpoint
 
-The repository does not host weights or invent a download location. If you
-already have the authorized Laya-format checkpoint, verify it without loading
-the model:
+Install the small Hub client, authenticate with an account that has access, and
+download the complete checkpoint:
+
+```bash
+python3 -m pip install huggingface_hub
+huggingface-cli login
+python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty-1", local_dir="scotty-1-checkpoint"))'
+```
+
+Verify the downloaded Laya-format checkpoint without loading the model:
 
 ```bash
 python3 tools/run_local_checkpoint.py \
-  --checkpoint /absolute/path/to/selected_checkpoint \
+  --checkpoint scotty-1-checkpoint \
   --verify-only
 ```
 
@@ -83,7 +100,7 @@ Then run one joint candidate decision:
 
 ```bash
 python3 tools/run_local_checkpoint.py \
-  --checkpoint /absolute/path/to/selected_checkpoint \
+  --checkpoint scotty-1-checkpoint \
   --device cuda \
   --state "The shipment is sealed, labelled, and the manifest is signed." \
   --instruction "Is this shipment ready for dispatch?" \

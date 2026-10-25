@@ -89,6 +89,15 @@ def main() -> None:
     assert licensing["project_spdx"] == "Apache-2.0"
     assert sha256(ROOT / "LICENSE") == licensing["root_license_sha256"]
     assert (ROOT / licensing["scope_file"]).is_file()
+    hosting = provenance["hosting"]
+    assert hosting == {
+        "huggingface_repo": "DarwinGuru/scotty-1",
+        "repo_type": "model",
+        "private": True,
+        "checkpoint_sha256": provenance["model"]["selected_checkpoint_sha256"],
+        "checkpoint_in_git": False,
+        "verified_huggingface_commit": "59347d6bc1702419560e779a4dbf2aa9ccc0a055",
+    }
     provider_name_hits = []
     disallowed_provider_name = b"base" + b"ten"
     for path in ROOT.rglob("*"):

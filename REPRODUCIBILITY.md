@@ -35,14 +35,30 @@ python3 -m compileall -q reproduction/scripts reproduction/vendor/laya_checkout/
 `SCOTTY_REPRO_ROOT` is not this Git repository by default. It is the external
 artifact tree expected by the historical scripts.
 
+## Checkpoint download
+
+The complete checkpoint is hosted privately at
+[`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1). Authenticate
+with an account that has access, then download it without placing the weights
+in Git:
+
+```bash
+python3 -m pip install huggingface_hub
+huggingface-cli login
+python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty-1", local_dir="scotty-1-checkpoint"))'
+```
+
+The same repository can later be made public only after a separate release
+approval. No visibility change is implied by these instructions.
+
 ## Full training and evaluation: external artifacts required
 
 The source dependency closure is now included, but execution still needs:
 
 1. The Beam-generated and Typed Decisions split files whose hashes are recorded
    in `provenance/artifacts.json`.
-2. For evaluation/inference, the frozen checkpoint plus tokenizer with the
-   recorded model hash.
+2. For evaluation/inference, the private Hugging Face checkpoint plus tokenizer
+   with the recorded model hash.
 3. A CUDA-capable environment compatible with the recorded run.
 
 For inference, an authorized local checkpoint must have this Laya layout:
@@ -59,13 +75,14 @@ Verify it without importing PyTorch or loading weights:
 
 ```bash
 python3 tools/run_local_checkpoint.py \
-  --checkpoint /absolute/path/to/selected_checkpoint \
+  --checkpoint scotty-1-checkpoint \
   --verify-only
 ```
 
 The expected `model.safetensors` SHA-256 is
 `b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783`.
-The command never downloads a checkpoint.
+The command never downloads a checkpoint itself; the preceding Hub command
+does that explicitly.
 
 Then invoke the appropriate script with `--help` or inspect its top-level path
 constants before running. Training is intentionally not run by the repository
@@ -80,9 +97,10 @@ verification target.
 - Paper PDF hash, page count, and visual inspection performed during packaging.
 
 Checkpoint loading, inference, training, and full evaluation were **not** run
-during packaging because the weights and raw rows are intentionally excluded
-and training was out of scope. The Python files are therefore verified source,
-not a claim of an end-to-end runnable release from a clean checkout.
+during packaging; raw rows are excluded and training was out of scope. The
+checkpoint upload was verified by a clean download and SHA-256 comparison. The
+Python files are therefore verified source, not a claim that clean-environment
+end-to-end inference or training was rerun.
 
 The local-checkpoint helper's validation, hash-failure, and question-building
 paths are unit tested without model weights. Full inference is still unverified

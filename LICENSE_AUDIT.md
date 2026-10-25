@@ -43,22 +43,23 @@ The rules require compliance with applicable third-party terms but do not name a
 specific project license.
 
 Nothing in this section authorizes publication. Keep this GitHub repository and
-any future Hugging Face repository private until the owner gives separate
-approval.
+the existing Hugging Face model repository private until the owner gives
+separate approval.
 
 ## Recommended release shape
 
 - GitHub: code, configs, aggregate results, paper PDF, documentation, and the
   vendored Laya license/provenance.
 - Hugging Face model repository: the approximately 0.8 GB Scotty-1 checkpoint,
-  model card, checksum, and the same attribution/notices, only after approval.
+  model card, checksum, and Apache-2.0 license are now hosted privately at
+  [`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1).
 - Optional Hugging Face Space: a small demonstration that loads the approved
   model repository, with the README explicitly explaining Beam's role.
 - Keep raw datasets and row-level predictions out unless their separate review
   is complete.
 
-No public Hugging Face repository exists yet, so this repository deliberately
-contains no invented download command or model ID.
+No public Hugging Face repository exists yet. The model ID above is real and
+private; publishing it remains a separate approval-gated action.
 
 ## Questions that still block public release
 

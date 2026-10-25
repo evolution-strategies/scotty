@@ -7,7 +7,8 @@ explicitly approves the visibility change.
 - [ ] Confirm author list, affiliation, acknowledgments, and paper title.
 - [x] Apply Apache-2.0 to original project software and intended checkpoint weights with explicit paper/data/third-party exclusions.
 - [ ] Resolve the open questions in `LICENSE_AUDIT.md`; upstream Apache-2.0 declarations alone are not blanket clearance.
-- [ ] Decide whether the model checkpoint may be distributed and where; do not add Git LFS costs silently.
+- [x] Host the verified complete checkpoint privately at `DarwinGuru/scotty-1`; keep it out of Git history.
+- [ ] Obtain explicit approval before changing the Hugging Face model repository from private to public.
 - [ ] Review raw/row-level outputs for licensing, personal, proprietary, or harmful content.
 - [x] Package the project helper modules and record their provenance.
 - [ ] Recreate a fully pinned environment and rerun smoke inference on the frozen checkpoint.
