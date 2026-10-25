@@ -44,7 +44,7 @@ in Git:
 
 ```bash
 python3 -m pip install huggingface_hub
-huggingface-cli login
+hf auth login
 python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty-1", local_dir="scotty-1-checkpoint"))'
 ```
 
