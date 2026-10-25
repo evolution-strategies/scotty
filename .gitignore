@@ -18,5 +18,13 @@ paper/source/*.aux
 paper/source/*.log
 paper/source/*.out
 paper/source/*.pdf
+paper/source/
+paper/original/
+paper/*source*.zip
+paper/**/*.tex
+paper/**/*.bib
+paper/**/*.cls
+paper/**/*.sty
+paper/**/build.sh
 tmp/
 _snapshot/

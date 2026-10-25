@@ -10,51 +10,70 @@ python3 -m unittest discover -s tests -v
 python3 tools/show_results.py
 ```
 
-The paper was rebuilt with TeX Live by running:
+The repository verifier checks the six-page paper PDF's SHA-256 against
+[`provenance/artifacts.json`](provenance/artifacts.json). Paper source is not
+included in this repository.
 
-```bash
-make paper
-```
+## Source setup
 
-It compiles twice from `paper/source/scotty1.tex` and the supplied unchanged
-`esannV2.cls`. The resulting PDF is six A4 pages. The repository verifier checks
-its SHA-256 against [`provenance/artifacts.json`](provenance/artifacts.json).
+The eight scripts in the frozen snapshot and their four project helper modules
+are in [`reproduction/scripts/`](reproduction/scripts/). The Apache-2.0 Laya
+checkout actually selected by the launch wrappers is in
+[`reproduction/vendor/laya_checkout/`](reproduction/vendor/laya_checkout/).
+Machine-specific root assignments were replaced by the required
+`SCOTTY_REPRO_ROOT` environment variable; provenance and before/after hashes are
+recorded in [`provenance/artifacts.json`](provenance/artifacts.json).
 
-## Full training and evaluation: external artifacts required
-
-The scripts in [`reproduction/scripts/`](reproduction/scripts/) are the exact
-available frozen scripts except that the old machine-specific root assignment
-was replaced by the required `SCOTTY_REPRO_ROOT` environment variable. They are
-not a self-contained release. Before they can run, the root must contain:
-
-1. The Laya source tree and its `laya` Python package.
-2. Project helper modules imported by the scripts: `beam_one_common`,
-   `smoke_beam_one`, `train_laya_stage_compare`, and
-   `evaluate_beam_three_typed_test`.
-3. The Beam-generated and Typed Decisions split files whose hashes are recorded
-   in `provenance/artifacts.json`.
-4. For evaluation/inference, the frozen checkpoint plus tokenizer with the
-   recorded model hash.
-5. A CUDA-capable environment compatible with the recorded run.
-
-Set the root explicitly:
+From the repository root:
 
 ```bash
 export SCOTTY_REPRO_ROOT=/absolute/path/to/reproduction-root
+export PYTHONPATH="$PWD/reproduction/vendor/laya_checkout:$PWD/reproduction/scripts"
+python3 -m compileall -q reproduction/scripts reproduction/vendor/laya_checkout/laya
 ```
+
+`SCOTTY_REPRO_ROOT` is not this Git repository by default. It is the external
+artifact tree expected by the historical scripts.
+
+## Full training and evaluation: external artifacts required
+
+The source dependency closure is now included, but execution still needs:
+
+1. The Beam-generated and Typed Decisions split files whose hashes are recorded
+   in `provenance/artifacts.json`.
+2. For evaluation/inference, the frozen checkpoint plus tokenizer with the
+   recorded model hash.
+3. A CUDA-capable environment compatible with the recorded run.
 
 Then invoke the appropriate script with `--help` or inspect its top-level path
 constants before running. Training is intentionally not run by the repository
 verification target.
 
+### What was tested
+
+- Repository and artifact hash verification.
+- Python syntax parsing/compilation for every included script and vendored Laya
+  module.
+- Aggregate-result and split invariants.
+- Paper PDF hash, page count, and visual inspection performed during packaging.
+
+Checkpoint loading, inference, training, and full evaluation were **not** run
+during packaging because the weights and raw rows are intentionally excluded
+and training was out of scope. The Python files are therefore verified source,
+not a claim of an end-to-end runnable release from a clean checkout.
+
 ## Recorded environment
 
-- PyTorch: `2.14.1+cu130`
+- Python: `3.12.3` (recovered project virtual environment)
+- PyTorch: `2.14.1+cu130` (frozen run report)
+- Transformers: `5.19.0` (frozen encoder configuration)
 - accelerator: NVIDIA GB10
 - precision: BF16 autocast
 - base model revision: `45bb4654a4d5aaff24dd11d4781fa46d39bf8c13`
 - seed: `0`
 
-The frozen reports did not record every package version. This repository does
-not invent missing pins; exact bit-for-bit environment reconstruction remains a
-gap. See [`environment/RECORDED.md`](environment/RECORDED.md).
+The full current project-venv snapshot is preserved in
+[`environment/recovered-project-venv.txt`](environment/recovered-project-venv.txt).
+It was captured after the run and is not immutable proof that every secondary
+package had the same version during training. See
+[`environment/RECORDED.md`](environment/RECORDED.md) for the evidence boundary.

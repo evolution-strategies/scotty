@@ -24,11 +24,43 @@ class RepositoryFactsTest(unittest.TestCase):
         self.assertEqual(len(provenance["model"]["selected_checkpoint_sha256"]), 64)
         self.assertFalse(provenance["model"]["checkpoint_in_git"])
 
-    def test_paper_source_name(self) -> None:
-        source = (ROOT / "paper/source/scotty1.tex").read_text()
-        self.assertIn("pdftitle={Scotty-1:", source)
-        self.assertIn("\\newcommand{\\model}{Scotty-1}", source)
-        self.assertIn("Reflection Beam 1.0 501B-A23B", source)
+    def test_paper_directory_contains_only_pdf(self) -> None:
+        files = sorted(
+            path.relative_to(ROOT).as_posix()
+            for path in (ROOT / "paper").rglob("*")
+            if path.is_file()
+        )
+        self.assertEqual(files, ["paper/Scotty-1_ESANN_paper.pdf"])
+        provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
+        self.assertFalse(provenance["paper"]["paper_source_in_git"])
+
+    def test_reproduction_dependency_closure_is_present(self) -> None:
+        expected_helpers = {
+            "beam_one_common.py",
+            "smoke_beam_one.py",
+            "train_laya_stage_compare.py",
+            "evaluate_beam_three_typed_test.py",
+        }
+        scripts = ROOT / "reproduction/scripts"
+        self.assertTrue(all((scripts / name).is_file() for name in expected_helpers))
+        vendor = ROOT / "reproduction/vendor/laya_checkout"
+        self.assertTrue((vendor / "LICENSE").is_file())
+        self.assertTrue((vendor / "laya/train.py").is_file())
+
+    def test_reproduction_provenance(self) -> None:
+        provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
+        reproduction = provenance["reproduction"]
+        self.assertEqual(
+            reproduction["laya"]["commit"],
+            "eba3b0367643498e478ed02e870fa53737da5061",
+        )
+        self.assertEqual(reproduction["laya"]["license"], "Apache-2.0")
+        self.assertTrue(reproduction["environment"]["full_freeze_is_post_run_evidence"])
+
+    def test_portable_reproduction_roots(self) -> None:
+        for path in (ROOT / "reproduction/scripts").glob("*.py"):
+            source = path.read_text()
+            self.assertNotIn('/home/oliver', source, path.name)
 
 
 if __name__ == "__main__":

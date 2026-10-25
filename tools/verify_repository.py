@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -25,14 +26,47 @@ def main() -> None:
     provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
     paper = provenance["paper"]
     expected = {
-        ROOT / "paper/original/Beam-1_ESANN_paper.pdf": paper["original_beam_1_pdf_sha256"],
-        ROOT / "paper/original/Beam-1_ESANN_LaTeX_source.zip": paper["original_beam_1_source_zip_sha256"],
         ROOT / "paper/Scotty-1_ESANN_paper.pdf": paper["scotty_1_pdf_sha256"],
-        ROOT / "paper/Scotty-1_ESANN_LaTeX_source.zip": paper["scotty_1_source_zip_sha256"],
     }
     for path, wanted in expected.items():
         actual = sha256(path)
         assert actual == wanted, f"SHA mismatch for {path.relative_to(ROOT)}: {actual}"
+
+    paper_files = sorted(
+        path.relative_to(ROOT).as_posix()
+        for path in (ROOT / "paper").rglob("*")
+        if path.is_file()
+    )
+    assert paper_files == ["paper/Scotty-1_ESANN_paper.pdf"], (
+        f"Only the paper PDF may be tracked/present: {paper_files}"
+    )
+    assert paper["paper_source_in_git"] is False
+
+    reproduction = provenance["reproduction"]
+    for filename, hashes in reproduction["helpers"].items():
+        path = ROOT / "reproduction/scripts" / filename
+        actual = sha256(path)
+        assert actual == hashes["repository_sha256"], (
+            f"SHA mismatch for {path.relative_to(ROOT)}: {actual}"
+        )
+
+    laya = reproduction["laya"]
+    vendor_expected = {
+        "LICENSE": laya["license_sha256"],
+        "pyproject.toml": laya["pyproject_sha256"],
+        "laya/__init__.py": laya["init_sha256"],
+        "laya/common.py": laya["common_sha256"],
+        "laya/train.py": laya["train_sha256"],
+    }
+    vendor_root = ROOT / "reproduction/vendor/laya_checkout"
+    for relative, wanted in vendor_expected.items():
+        path = vendor_root / relative
+        actual = sha256(path)
+        assert actual == wanted, f"SHA mismatch for {path.relative_to(ROOT)}: {actual}"
+
+    python_files = sorted((ROOT / "reproduction").rglob("*.py"))
+    for path in python_files:
+        ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     offenders = []
     for path in ROOT.rglob("*"):
@@ -52,7 +86,11 @@ def main() -> None:
         "separate_test_decisions": 5259,
     }
     assert not (ROOT / "LICENSE").exists(), "No license has been selected"
-    print(f"Verified {len(expected)} artifact hashes, exclusions, metrics, and split counts.")
+    print(
+        f"Verified {len(expected)} artifacts, {len(reproduction['helpers'])} helpers, "
+        f"{len(vendor_expected)} vendored-source hashes, {len(python_files)} Python files, "
+        "exclusions, metrics, and split counts."
+    )
 
 
 if __name__ == "__main__":

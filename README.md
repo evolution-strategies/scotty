@@ -17,7 +17,6 @@ excluded. Their identities are recorded by hash in [`provenance/artifacts.json`]
 | Protected Beam family holdout (raw) | **83.03%** | 56.34% | Released root Laya: 53.51% |
 | Protected Beam family holdout (position-balanced) | **76.39%** | 51.64% | Released root Laya: 48.56% |
 | Official Typed test (hard) | 75.45% | **78.35%** | Published specialist Laya: 76.6% |
-| Official Typed test (soft agreement) | 60.20% | **61.11%** | - |
 
 The control shows a coverage-specialization tradeoff, not blanket superiority.
 This is a single-seed study, and both tests were inspected retrospectively.
@@ -26,10 +25,9 @@ See [`RESULTS.md`](RESULTS.md) for definitions and caveats.
 ## Repository tour
 
 - [`paper/Scotty-1_ESANN_paper.pdf`](paper/Scotty-1_ESANN_paper.pdf) - six-page Scotty-1 manuscript.
-- [`paper/source/`](paper/source/) - compile-ready LaTeX and unchanged ESANN class.
 - [`configs/`](configs/) - architecture and training settings.
 - [`results/`](results/) - machine-readable aggregate metrics and exact split counts.
-- [`reproduction/`](reproduction/) - frozen training/evaluation scripts with portable root selection.
+- [`reproduction/`](reproduction/) - frozen scripts, recovered helpers, and the licensed Laya source used by the run.
 - [`MODEL_CARD.md`](MODEL_CARD.md) and [`DATA_CARD.md`](DATA_CARD.md) - intended use, data provenance, and limitations.
 - [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) - verified commands and external-artifact requirements.
 - [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) - work required before any public release.
@@ -63,15 +61,10 @@ python3 -m unittest discover -s tests -v
 python3 tools/show_results.py
 ```
 
-To rebuild the paper with a current TeX Live installation:
-
-```bash
-make paper
-```
-
-Training, checkpoint inference, and full evaluation need artifacts that are not
-in Git. Follow [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md); do not interpret the
-presence of source scripts as a self-contained training release.
+Training, checkpoint inference, and full evaluation still need the excluded
+checkpoint and hashed datasets. Follow
+[`REPRODUCIBILITY.md`](REPRODUCIBILITY.md); source and syntax paths are verified,
+but packaging did not rerun training or checkpoint inference.
 
 ## Current release status
 

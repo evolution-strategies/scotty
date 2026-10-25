@@ -21,11 +21,49 @@
     "row_level_predictions_in_git": false
   },
   "paper": {
-    "original_beam_1_pdf_sha256": "7cfc073c8e55eb861b13715dec968e839f5f86f0a4241dc828fb38c5b70915b9",
-    "original_beam_1_source_zip_sha256": "1bbc49e339d8088cf537966aaf519cdf448c0574306966cd145a9d9a6faf148e",
     "scotty_1_pdf_sha256": "62eda149b08633abbcf54ea0f95e3d6cefe5061dc51c233ff16a33f25d58b66c",
-    "scotty_1_source_zip_sha256": "91e2177eccdcda827af034e1607cc17fb6aabe1bcd19b8b89f8bf2a19b1a9daa",
-    "scotty_1_pages": 6
+    "scotty_1_pages": 6,
+    "paper_source_in_git": false
+  },
+  "reproduction": {
+    "helpers": {
+      "beam_one_common.py": {
+        "source_sha256": "41a7b2d8e515ca4c91b50667405162cecb7045d208c7206dad5d97f5a6d849d1",
+        "repository_sha256": "41a7b2d8e515ca4c91b50667405162cecb7045d208c7206dad5d97f5a6d849d1"
+      },
+      "smoke_beam_one.py": {
+        "source_sha256": "d6dcd89cbd587081c491632014f6b3127b9cb7e53c09683afaa2e886fe802e27",
+        "repository_sha256": "d6dcd89cbd587081c491632014f6b3127b9cb7e53c09683afaa2e886fe802e27"
+      },
+      "train_laya_stage_compare.py": {
+        "source_sha256": "882e4999f23bbba89f8c3746c3ad93be87d91ddbd75b256e458d3ca91289b8b3",
+        "repository_sha256": "dd86e881b02a5bdaedba6e2a0950daacdaee2aa5908656f00779f7ad1a6cc716"
+      },
+      "evaluate_beam_three_typed_test.py": {
+        "source_sha256": "5da859a1c224ceb556e8dc87ed7cb4e1aa1825056874be7ff15efc91c56bfa68",
+        "repository_sha256": "bbe9f90cecb1172471e182c34834f846ec3a8f2b4edfac24cff4b1bb3249752a"
+      }
+    },
+    "laya": {
+      "upstream": "https://github.com/NandhaKishorM/laya.git",
+      "commit": "eba3b0367643498e478ed02e870fa53737da5061",
+      "package_version": "0.3.28",
+      "license": "Apache-2.0",
+      "license_sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+      "pyproject_sha256": "08b9a29b125e7c61889c95a524bea30c93b4762e9c98048acd942e0daf8d9f8d",
+      "init_sha256": "ccccad93135410078b6df29b23eec8f8d26532757d72a4078b9ef1a4c41280e5",
+      "common_sha256": "f9a67471e635754e3233fa25842ee2a51601755e53f21b2681938021236530e7",
+      "train_sha256": "e6901114abe1d49fef18bfbb99e6e0a8ddd3cb85bf824bccbe80dd7e15c14a0b",
+      "local_modifications": [
+        "laya/train.py: move model to the selected device before optional base-checkpoint evaluation"
+      ]
+    },
+    "environment": {
+      "python_recovered": "3.12.3",
+      "torch_frozen": "2.14.1+cu130",
+      "transformers_frozen": "5.19.0",
+      "full_freeze_is_post_run_evidence": true
+    }
   },
   "excluded_from_git": [
     "model checkpoints",

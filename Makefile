@@ -1,4 +1,4 @@
-.PHONY: verify test results paper
+.PHONY: verify test results
 
 verify:
 	python3 tools/verify_repository.py
@@ -8,7 +8,3 @@ test:
 
 results:
 	python3 tools/show_results.py
-
-paper:
-	cd paper/source && ./build.sh
-	cp paper/source/scotty1.pdf paper/Scotty-1_ESANN_paper.pdf

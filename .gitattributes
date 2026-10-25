@@ -1,2 +1,1 @@
-# Preserve the official ESANN class byte-for-byte; it ships with CRLF endings.
-paper/source/esannV2.cls binary
+reproduction/vendor/laya_checkout/** whitespace=-trailing-space
