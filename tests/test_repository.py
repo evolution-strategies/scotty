@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import tempfile
 import unittest
 from pathlib import Path
+
+from tools.run_local_checkpoint import choice_question, verify_checkpoint
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,6 +65,33 @@ class RepositoryFactsTest(unittest.TestCase):
         for path in (ROOT / "reproduction/scripts").glob("*.py"):
             source = path.read_text()
             self.assertNotIn('/home/oliver', source, path.name)
+
+    def test_local_checkpoint_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint = Path(directory)
+            (checkpoint / "tokenizer").mkdir()
+            (checkpoint / "encoder").mkdir()
+            (checkpoint / "rl_agent_config.json").write_text("{}\n")
+            payload = b"small test tensor placeholder"
+            (checkpoint / "model.safetensors").write_bytes(payload)
+            expected = hashlib.sha256(payload).hexdigest()
+            result = verify_checkpoint(checkpoint, expected_sha256=expected)
+            self.assertEqual(result["status"], "verified")
+            with self.assertRaises(ValueError):
+                verify_checkpoint(checkpoint, expected_sha256="0" * 64)
+
+    def test_local_choice_question(self) -> None:
+        question = choice_question("Choose", ["alpha", "beta"])
+        self.assertEqual(question["decision"]["criteria"], ["alpha", "beta"])
+        with self.assertRaises(ValueError):
+            choice_question("Choose", ["same", "same"])
+
+    def test_license_scope(self) -> None:
+        provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
+        self.assertEqual(provenance["licensing"]["project_spdx"], "Apache-2.0")
+        scope = (ROOT / "LICENSE_SCOPE.md").read_text()
+        self.assertIn("paper/scotty-1-paper.pdf", scope)
+        self.assertIn("does **not** apply", scope)
 
 
 if __name__ == "__main__":

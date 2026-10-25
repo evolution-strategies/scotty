@@ -45,6 +45,28 @@ The source dependency closure is now included, but execution still needs:
    recorded model hash.
 3. A CUDA-capable environment compatible with the recorded run.
 
+For inference, an authorized local checkpoint must have this Laya layout:
+
+```text
+selected_checkpoint/
+├── rl_agent_config.json
+├── model.safetensors
+├── encoder/
+└── tokenizer/
+```
+
+Verify it without importing PyTorch or loading weights:
+
+```bash
+python3 tools/run_local_checkpoint.py \
+  --checkpoint /absolute/path/to/selected_checkpoint \
+  --verify-only
+```
+
+The expected `model.safetensors` SHA-256 is
+`b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783`.
+The command never downloads a checkpoint.
+
 Then invoke the appropriate script with `--help` or inspect its top-level path
 constants before running. Training is intentionally not run by the repository
 verification target.
@@ -61,6 +83,10 @@ Checkpoint loading, inference, training, and full evaluation were **not** run
 during packaging because the weights and raw rows are intentionally excluded
 and training was out of scope. The Python files are therefore verified source,
 not a claim of an end-to-end runnable release from a clean checkout.
+
+The local-checkpoint helper's validation, hash-failure, and question-building
+paths are unit tested without model weights. Full inference is still unverified
+in a clean environment.
 
 ## Recorded environment
 

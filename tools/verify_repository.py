@@ -85,7 +85,24 @@ def main() -> None:
         "validation_decisions": 4527,
         "separate_test_decisions": 5259,
     }
-    assert not (ROOT / "LICENSE").exists(), "No license has been selected"
+    licensing = provenance["licensing"]
+    assert licensing["project_spdx"] == "Apache-2.0"
+    assert sha256(ROOT / "LICENSE") == licensing["root_license_sha256"]
+    assert (ROOT / licensing["scope_file"]).is_file()
+    provider_name_hits = []
+    disallowed_provider_name = b"base" + b"ten"
+    for path in ROOT.rglob("*"):
+        if (
+            not path.is_file()
+            or ".git" in path.parts
+            or "tmp" in path.parts
+            or "__pycache__" in path.parts
+            or path.suffix == ".pyc"
+        ):
+            continue
+        if disallowed_provider_name in path.read_bytes().lower():
+            provider_name_hits.append(str(path.relative_to(ROOT)))
+    assert not provider_name_hits, f"Named provider found in current tree: {provider_name_hits}"
     print(
         f"Verified {len(expected)} artifacts, {len(reproduction['helpers'])} helpers, "
         f"{len(vendor_expected)} vendored-source hashes, {len(python_files)} Python files, "

@@ -30,6 +30,7 @@ See [`RESULTS.md`](RESULTS.md) for definitions and caveats.
 - [`reproduction/`](reproduction/) - frozen scripts, recovered helpers, and the licensed Laya source used by the run.
 - [`MODEL_CARD.md`](MODEL_CARD.md) and [`DATA_CARD.md`](DATA_CARD.md) - intended use, data provenance, and limitations.
 - [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) - verified commands and external-artifact requirements.
+- [`LICENSE_AUDIT.md`](LICENSE_AUDIT.md) - upstream terms evidence and unresolved release questions.
 - [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) - work required before any public release.
 
 ## Decision interface
@@ -66,10 +67,39 @@ checkpoint and hashed datasets. Follow
 [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md); source and syntax paths are verified,
 but packaging did not rerun training or checkpoint inference.
 
-## Current release status
+## Use an authorized local checkpoint
+
+The repository does not host weights or invent a download location. If you
+already have the authorized Laya-format checkpoint, verify it without loading
+the model:
+
+```bash
+python3 tools/run_local_checkpoint.py \
+  --checkpoint /absolute/path/to/selected_checkpoint \
+  --verify-only
+```
+
+Then run one joint candidate decision:
+
+```bash
+python3 tools/run_local_checkpoint.py \
+  --checkpoint /absolute/path/to/selected_checkpoint \
+  --device cuda \
+  --state "The shipment is sealed, labelled, and the manifest is signed." \
+  --instruction "Is this shipment ready for dispatch?" \
+  --option false \
+  --option true
+```
+
+The command refuses a checkpoint whose `model.safetensors` does not match the
+recorded SHA-256. See [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) for the required
+directory layout and the environment evidence boundary.
+
+## License and release status
 
 This repository is intended to remain **private** until a separate competition
-release decision. No project license has been selected. No permission to use,
-redistribute, or sublicense the code, data, weights, paper, or third-party
-materials should be inferred from this repository. See
-[`THIRD_PARTY.md`](THIRD_PARTY.md) and [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md).
+release decision. Original Scotty-1 software and intended checkpoint weights
+are under Apache-2.0; the manuscript, datasets, and third-party material are
+outside that grant. See [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md),
+[`THIRD_PARTY.md`](THIRD_PARTY.md), and
+[`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md).

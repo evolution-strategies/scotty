@@ -21,7 +21,7 @@
     "row_level_predictions_in_git": false
   },
   "paper": {
-    "scotty_1_pdf_sha256": "62eda149b08633abbcf54ea0f95e3d6cefe5061dc51c233ff16a33f25d58b66c",
+    "scotty_1_pdf_sha256": "e9f9a7c3a083eab49983343436ca9ddba1f352661bb6758b008b2c35091fb54b",
     "scotty_1_pages": 6,
     "paper_source_in_git": false
   },
@@ -64,6 +64,13 @@
       "transformers_frozen": "5.19.0",
       "full_freeze_is_post_run_evidence": true
     }
+  },
+  "licensing": {
+    "project_spdx": "Apache-2.0",
+    "root_license_sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+    "scope_file": "LICENSE_SCOPE.md",
+    "paper_in_scope": false,
+    "datasets_in_scope": false
   },
   "excluded_from_git": [
     "model checkpoints",
