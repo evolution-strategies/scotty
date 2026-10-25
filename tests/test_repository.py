@@ -30,7 +30,7 @@ class RepositoryFactsTest(unittest.TestCase):
             for path in (ROOT / "paper").rglob("*")
             if path.is_file()
         )
-        self.assertEqual(files, ["paper/Scotty-1_ESANN_paper.pdf"])
+        self.assertEqual(files, ["paper/scotty-1-paper.pdf"])
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         self.assertFalse(provenance["paper"]["paper_source_in_git"])
 

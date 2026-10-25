@@ -26,7 +26,7 @@ def main() -> None:
     provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
     paper = provenance["paper"]
     expected = {
-        ROOT / "paper/Scotty-1_ESANN_paper.pdf": paper["scotty_1_pdf_sha256"],
+        ROOT / "paper/scotty-1-paper.pdf": paper["scotty_1_pdf_sha256"],
     }
     for path, wanted in expected.items():
         actual = sha256(path)
@@ -37,7 +37,7 @@ def main() -> None:
         for path in (ROOT / "paper").rglob("*")
         if path.is_file()
     )
-    assert paper_files == ["paper/Scotty-1_ESANN_paper.pdf"], (
+    assert paper_files == ["paper/scotty-1-paper.pdf"], (
         f"Only the paper PDF may be tracked/present: {paper_files}"
     )
     assert paper["paper_source_in_git"] is False

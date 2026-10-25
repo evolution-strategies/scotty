@@ -24,7 +24,7 @@ See [`RESULTS.md`](RESULTS.md) for definitions and caveats.
 
 ## Repository tour
 
-- [`paper/Scotty-1_ESANN_paper.pdf`](paper/Scotty-1_ESANN_paper.pdf) - six-page Scotty-1 manuscript.
+- [`paper/scotty-1-paper.pdf`](paper/scotty-1-paper.pdf) - six-page Scotty-1 manuscript.
 - [`configs/`](configs/) - architecture and training settings.
 - [`results/`](results/) - machine-readable aggregate metrics and exact split counts.
 - [`reproduction/`](reproduction/) - frozen scripts, recovered helpers, and the licensed Laya source used by the run.
