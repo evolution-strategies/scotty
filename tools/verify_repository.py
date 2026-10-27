@@ -96,8 +96,32 @@ def main() -> None:
         "private": True,
         "checkpoint_sha256": provenance["model"]["selected_checkpoint_sha256"],
         "checkpoint_in_git": False,
-        "verified_huggingface_commit": "59347d6bc1702419560e779a4dbf2aa9ccc0a055",
+        "verified_huggingface_commit": "b377f2ab1b92c3f114bea9fc70e4a619c04fe04b",
     }
+    verification = provenance["verification"]
+    assert verification["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
+    assert verification["selected_option"] == "true"
+    assert verification["selected_probability"] == 0.8872
+    assert verification["input_tokens"] == 31
+    assert verification["truncated"] is False
+    assert verification["training_rerun"] is False
+    hf_card = (ROOT / "huggingface/README.md").read_text()
+    for required in (
+        "Build with Beam",
+        "How Beam was used",
+        "DarwinGuru/scotty-1",
+        provenance["model"]["selected_checkpoint_sha256"],
+        "Reflection Beam 1.0 501B-A23B",
+    ):
+        assert required in hf_card, f"Hugging Face card is missing: {required}"
+    submission = (ROOT / "submission/README.md").read_text()
+    for required in (
+        "2 November 2026 at 11:59 PM Pacific Time",
+        "DarwinGuru/scotty-1",
+        "evolution-strategies/scotty-1",
+        "Ready-to-post discussion entry",
+    ):
+        assert required in submission, f"Submission package is missing: {required}"
     provider_name_hits = []
     disallowed_provider_name = b"base" + b"ten"
     for path in ROOT.rglob("*"):
@@ -115,7 +139,7 @@ def main() -> None:
     print(
         f"Verified {len(expected)} artifacts, {len(reproduction['helpers'])} helpers, "
         f"{len(vendor_expected)} vendored-source hashes, {len(python_files)} Python files, "
-        "exclusions, metrics, and split counts."
+        "exclusions, metrics, split counts, and submission materials."
     )
 
 

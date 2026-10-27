@@ -20,6 +20,20 @@ configuration, tokenizer, model card, and Apache-2.0 license. The weights stay
 out of Git history while the repository remains easy to make public later with
 an explicit release decision.
 
+## Build with Beam
+
+Scotty-1 is being prepared for the
+[Build with Beam competition](https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5).
+Reflection Beam 1.0 501B-A23B served as the synthetic teacher for 19,878 typed
+decisions across 18 task families. Scotty-1 turns that broad supervision into a
+421M-parameter local model that scores a constrained candidate set instead of
+generating free-form text. Beam supplied supervision, not model weights; no
+local Beam checkpoint is part of Scotty-1.
+
+The competition package and ready-to-post entry are in
+[`submission/README.md`](submission/README.md). Publication and submission are
+separate approval-gated actions.
+
 ## Headline results
 
 | Evaluation | Scotty-1 | Matched-update Typed-only control | Other context |
@@ -42,6 +56,7 @@ See [`RESULTS.md`](RESULTS.md) for definitions and caveats.
 - [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) - verified commands and external-artifact requirements.
 - [`LICENSE_AUDIT.md`](LICENSE_AUDIT.md) - upstream terms evidence and unresolved release questions.
 - [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) - work required before any public release.
+- [`submission/README.md`](submission/README.md) - official call summary, judging narrative, and ready-to-post entry.
 
 ## Decision interface
 

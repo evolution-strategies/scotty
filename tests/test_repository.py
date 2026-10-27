@@ -105,6 +105,29 @@ class RepositoryFactsTest(unittest.TestCase):
             provenance["model"]["selected_checkpoint_sha256"],
         )
 
+    def test_competition_submission_materials(self) -> None:
+        hf_card = (ROOT / "huggingface/README.md").read_text()
+        self.assertIn("Build with Beam", hf_card)
+        self.assertIn("How Beam was used", hf_card)
+        self.assertIn("Reflection Beam 1.0 501B-A23B", hf_card)
+        submission = (ROOT / "submission/README.md").read_text()
+        self.assertIn("Ready-to-post discussion entry", submission)
+        self.assertIn("2 November 2026 at 11:59 PM Pacific Time", submission)
+        self.assertIn("DarwinGuru/scotty-1", submission)
+
+    def test_smoke_inference_record(self) -> None:
+        provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
+        verification = provenance["verification"]
+        self.assertEqual(
+            verification["checkpoint_sha256"],
+            provenance["model"]["selected_checkpoint_sha256"],
+        )
+        self.assertEqual(verification["selected_option"], "true")
+        self.assertEqual(verification["selected_probability"], 0.8872)
+        self.assertEqual(verification["input_tokens"], 31)
+        self.assertFalse(verification["truncated"])
+        self.assertFalse(verification["training_rerun"])
+
 
 if __name__ == "__main__":
     unittest.main()

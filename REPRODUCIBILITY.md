@@ -96,11 +96,16 @@ verification target.
 - Aggregate-result and split invariants.
 - Paper PDF hash, page count, and visual inspection performed during packaging.
 
-Checkpoint loading, inference, training, and full evaluation were **not** run
-during packaging; raw rows are excluded and training was out of scope. The
-checkpoint upload was verified by a clean download and SHA-256 comparison. The
-Python files are therefore verified source, not a claim that clean-environment
-end-to-end inference or training was rerun.
+The checkpoint upload was verified by a clean download and SHA-256 comparison.
+On 26 October 2026 PT, the exact frozen checkpoint was loaded in the recovered
+project environment on the NVIDIA GB10 and the documented two-option smoke
+example completed successfully: it selected `true` with probability 0.8872,
+using 31 input tokens without truncation. Training and full evaluation were not
+rerun, and a new clean environment has not yet reproduced full inference.
+
+Raw rows remain excluded and training was out of scope. The Python files are
+verified source, not a claim that end-to-end training was reproduced from a
+clean checkout.
 
 The local-checkpoint helper's validation, hash-failure, and question-building
 paths are unit tested without model weights. Full inference is still unverified

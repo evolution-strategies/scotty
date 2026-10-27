@@ -1,6 +1,6 @@
 # Licensing and release-readiness audit
 
-Status: private preparation only, reviewed 25 October 2026. This is an evidence
+Status: private preparation only, reviewed 26 October 2026. This is an evidence
 summary and release checklist, not legal advice or blanket rights clearance.
 Apache-2.0 has been selected for the original project software and intended
 Scotty-1 checkpoint under the boundaries in [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md).
@@ -35,12 +35,13 @@ metadata remains in private frozen provenance outside this repository.
 
 ## Competition requirements
 
-The [Build with Beam official rules](https://reflection.ai/legal/official-rules-build-with-beam)
-currently require a publicly accessible Hugging Face Space, model repository,
-or dataset repository; documentation explaining how Beam was used; and a link
-posted to the competition discussion by **2 November 2026 at 11:59 PM PT**.
-The rules require compliance with applicable third-party terms but do not name a
-specific project license.
+The [Build with Beam official rules](https://reflection.ai/legal/official-rules-build-with-beam),
+effective 15 October 2026 and rechecked 26 October 2026 PT, require a publicly
+accessible Hugging Face Space, model repository, or dataset repository;
+documentation explaining how Beam was used; and a link posted to the
+competition discussion by **2 November 2026 at 11:59 PM PT**. The rules require
+compliance with applicable third-party terms but do not name a specific project
+license.
 
 Nothing in this section authorizes publication. Keep this GitHub repository and
 the existing Hugging Face model repository private until the owner gives
