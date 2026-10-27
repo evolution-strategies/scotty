@@ -1,12 +1,12 @@
 # Apache-2.0 scope
 
-The root [`LICENSE`](LICENSE) applies to original Scotty-1 software,
-configuration, and documentation in this repository, and to the Scotty-1
+The root [`LICENSE`](LICENSE) applies to original Scotty software,
+configuration, and documentation in this repository, and to the Scotty
 checkpoint weights when they are distributed by the rights holder.
 
 It does **not** apply to:
 
-- `paper/scotty-1-paper.pdf`, which remains a separately controlled manuscript;
+- `paper/scotty-paper.pdf`, which remains a separately controlled manuscript;
 - datasets, synthetic source rows, or row-level predictions;
 - third-party material, which remains under its own terms; or
 - material for which the project does not hold the rights needed to grant a

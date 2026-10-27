@@ -10,15 +10,15 @@ tags:
   - synthetic-supervision
 ---
 
-# Scotty-1
+# Scotty
 
-Scotty-1 is a **Build with Beam** competition entry: a compact, local typed-
+Scotty is a **Build with Beam** competition entry: a compact, local typed-
 decision model trained with synthetic supervision from Reflection Beam. Given a
 state, an instruction, and a finite set of candidates, it scores every candidate
 jointly in one encoder pass.
 
 - Source, paper, reproducibility, and full results:
-  <https://github.com/evolution-strategies/scotty-1>
+  <https://github.com/evolution-strategies/scotty>
 - Competition call:
   <https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5>
 
@@ -26,12 +26,12 @@ jointly in one encoder pass.
 
 Reflection Beam 1.0 501B-A23B was used through Hugging Face Inference Providers
 as the synthetic teacher. It generated 19,878 typed decisions across 18 task
-families. Scotty-1 trained on 13,292 of those decisions together with 4,800
+families. Scotty trained on 13,292 of those decisions together with 4,800
 Typed Decisions examples; 3,327 Beam-generated decisions and 1,200 Typed
 Decisions examples were used for validation. Three entire Beam-generated task
 families, containing 3,259 decisions, were protected as a separate holdout.
 
-Beam supplied supervision, not model weights. Scotty-1 starts from a fresh
+Beam supplied supervision, not model weights. Scotty starts from a fresh
 `answerdotai/ModernBERT-large` encoder and a newly initialized two-layer
 Laya-format typed head. It does not load pretrained Laya weights or a local Beam
 checkpoint.
@@ -39,7 +39,7 @@ checkpoint.
 ## Why it is useful
 
 Large generative models are powerful decision teachers, but many downstream
-workflows only need a fast, auditable choice among known options. Scotty-1
+workflows only need a fast, auditable choice among known options. Scotty
 turns that supervision into a 421,293,827-parameter local scorer with a shared
 head over option `[MASK]` positions. It supports boolean, categorical, and
 ordered candidate decisions without generating free-form text.
@@ -50,7 +50,7 @@ controlled local experiments.
 
 ## Results
 
-| Evaluation | Scotty-1 | Matched-update Typed-only control |
+| Evaluation | Scotty | Matched-update Typed-only control |
 |---|---:|---:|
 | Protected Beam-family holdout, raw | **83.03%** | 56.34% |
 | Protected Beam-family holdout, position-balanced | **76.39%** | 51.64% |
@@ -87,7 +87,7 @@ Face account first. Then:
 ```python
 from huggingface_hub import snapshot_download
 
-checkpoint = snapshot_download("DarwinGuru/scotty-1")
+checkpoint = snapshot_download("DarwinGuru/scotty")
 print(checkpoint)
 ```
 
@@ -108,7 +108,7 @@ python3 tools/run_local_checkpoint.py \
 ```
 
 The exact frozen checkpoint completed this smoke inference successfully during
-submission preparation. Scotty-1 is a custom decision-model checkpoint, not a
+submission preparation. Scotty is a custom decision-model checkpoint, not a
 drop-in Transformers text-classification pipeline.
 
 ## Limitations
@@ -122,7 +122,7 @@ drop-in Transformers text-classification pipeline.
 
 ## License and attribution
 
-The original Scotty-1 checkpoint weights are provided under Apache-2.0. That
+The original Scotty checkpoint weights are provided under Apache-2.0. That
 grant does not automatically license datasets, the manuscript, or third-party
 material. The source repository preserves upstream licenses, pinned revisions,
 attribution, and the release-readiness audit.

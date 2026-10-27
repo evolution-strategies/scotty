@@ -24,7 +24,8 @@ class RepositoryFactsTest(unittest.TestCase):
 
     def test_public_name_and_checkpoint_hash(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
-        self.assertEqual(provenance["model"]["public_name"], "Scotty-1")
+        self.assertEqual(provenance["model"]["public_name"], "Scotty")
+        self.assertEqual(provenance["model"]["historical_public_names"], ["Scotty" + "-1"])
         self.assertEqual(len(provenance["model"]["selected_checkpoint_sha256"]), 64)
         self.assertFalse(provenance["model"]["checkpoint_in_git"])
 
@@ -34,9 +35,10 @@ class RepositoryFactsTest(unittest.TestCase):
             for path in (ROOT / "paper").rglob("*")
             if path.is_file()
         )
-        self.assertEqual(files, ["paper/scotty-1-paper.pdf"])
+        self.assertEqual(files, ["paper/scotty-paper.pdf"])
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         self.assertFalse(provenance["paper"]["paper_source_in_git"])
+        self.assertEqual(provenance["paper"]["scotty_pages"], 6)
 
     def test_reproduction_dependency_closure_is_present(self) -> None:
         expected_helpers = {
@@ -90,13 +92,13 @@ class RepositoryFactsTest(unittest.TestCase):
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         self.assertEqual(provenance["licensing"]["project_spdx"], "Apache-2.0")
         scope = (ROOT / "LICENSE_SCOPE.md").read_text()
-        self.assertIn("paper/scotty-1-paper.pdf", scope)
+        self.assertIn("paper/scotty-paper.pdf", scope)
         self.assertIn("does **not** apply", scope)
 
     def test_private_huggingface_hosting_record(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         hosting = provenance["hosting"]
-        self.assertEqual(hosting["huggingface_repo"], "DarwinGuru/scotty-1")
+        self.assertEqual(hosting["huggingface_repo"], "DarwinGuru/scotty")
         self.assertEqual(hosting["repo_type"], "model")
         self.assertTrue(hosting["private"])
         self.assertFalse(hosting["checkpoint_in_git"])
@@ -113,11 +115,16 @@ class RepositoryFactsTest(unittest.TestCase):
         submission = (ROOT / "submission/README.md").read_text()
         self.assertIn("Ready-to-post discussion entry", submission)
         self.assertIn("2 November 2026 at 11:59 PM Pacific Time", submission)
-        self.assertIn("DarwinGuru/scotty-1", submission)
+        self.assertIn("DarwinGuru/scotty", submission)
 
     def test_smoke_inference_record(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         verification = provenance["verification"]
+        self.assertEqual(verification["download_repo"], "DarwinGuru/scotty")
+        self.assertEqual(
+            verification["download_revision"],
+            provenance["hosting"]["verified_huggingface_commit"],
+        )
         self.assertEqual(
             verification["checkpoint_sha256"],
             provenance["model"]["selected_checkpoint_sha256"],

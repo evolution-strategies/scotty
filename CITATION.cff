@@ -1,10 +1,10 @@
 cff-version: 1.2.0
-message: "If you use Scotty-1, please cite the research draft."
-title: "Scotty-1: Learning Fast Typed Decisions from Synthetic Supervision"
+message: "If you use Scotty, please cite the research draft."
+title: "Scotty: Learning Fast Typed Decisions from Synthetic Supervision"
 type: article
 authors:
   - family-names: Kramer
     given-names: Oliver
 date-released: 2026-10-24
-repository-code: "https://github.com/evolution-strategies/scotty-1"
+repository-code: "https://github.com/evolution-strategies/scotty"
 abstract: "A compact ModernBERT typed-decision model trained with mixed synthetic supervision."

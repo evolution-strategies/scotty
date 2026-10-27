@@ -26,7 +26,7 @@ def main() -> None:
     provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
     paper = provenance["paper"]
     expected = {
-        ROOT / "paper/scotty-1-paper.pdf": paper["scotty_1_pdf_sha256"],
+        ROOT / "paper/scotty-paper.pdf": paper["scotty_pdf_sha256"],
     }
     for path, wanted in expected.items():
         actual = sha256(path)
@@ -37,10 +37,11 @@ def main() -> None:
         for path in (ROOT / "paper").rglob("*")
         if path.is_file()
     )
-    assert paper_files == ["paper/scotty-1-paper.pdf"], (
+    assert paper_files == ["paper/scotty-paper.pdf"], (
         f"Only the paper PDF may be tracked/present: {paper_files}"
     )
     assert paper["paper_source_in_git"] is False
+    assert paper["scotty_pages"] == 6
 
     reproduction = provenance["reproduction"]
     for filename, hashes in reproduction["helpers"].items():
@@ -80,6 +81,8 @@ def main() -> None:
     splits = json.loads((ROOT / "results/splits.json").read_text())
     assert metrics["scotty_1"]["beam_protected_holdout"]["raw_accuracy"] == 0.830316047867444
     assert metrics["scotty_1"]["typed_official_test"]["hard_accuracy"] == 0.7545
+    assert provenance["model"]["public_name"] == "Scotty"
+    assert provenance["model"]["historical_public_names"] == ["Scotty" + "-1"]
     assert splits["combined"] == {
         "train_decisions": 18092,
         "validation_decisions": 4527,
@@ -91,14 +94,16 @@ def main() -> None:
     assert (ROOT / licensing["scope_file"]).is_file()
     hosting = provenance["hosting"]
     assert hosting == {
-        "huggingface_repo": "DarwinGuru/scotty-1",
+        "huggingface_repo": "DarwinGuru/scotty",
         "repo_type": "model",
         "private": True,
         "checkpoint_sha256": provenance["model"]["selected_checkpoint_sha256"],
         "checkpoint_in_git": False,
-        "verified_huggingface_commit": "b377f2ab1b92c3f114bea9fc70e4a619c04fe04b",
+        "verified_huggingface_commit": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad",
     }
     verification = provenance["verification"]
+    assert verification["download_repo"] == hosting["huggingface_repo"]
+    assert verification["download_revision"] == hosting["verified_huggingface_commit"]
     assert verification["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
     assert verification["selected_option"] == "true"
     assert verification["selected_probability"] == 0.8872
@@ -109,7 +114,7 @@ def main() -> None:
     for required in (
         "Build with Beam",
         "How Beam was used",
-        "DarwinGuru/scotty-1",
+        "DarwinGuru/scotty",
         provenance["model"]["selected_checkpoint_sha256"],
         "Reflection Beam 1.0 501B-A23B",
     ):
@@ -117,8 +122,8 @@ def main() -> None:
     submission = (ROOT / "submission/README.md").read_text()
     for required in (
         "2 November 2026 at 11:59 PM Pacific Time",
-        "DarwinGuru/scotty-1",
-        "evolution-strategies/scotty-1",
+        "DarwinGuru/scotty",
+        "evolution-strategies/scotty",
         "Ready-to-post discussion entry",
     ):
         assert required in submission, f"Submission package is missing: {required}"
@@ -136,6 +141,22 @@ def main() -> None:
         if disallowed_provider_name in path.read_bytes().lower():
             provider_name_hits.append(str(path.relative_to(ROOT)))
     assert not provider_name_hits, f"Named provider found in current tree: {provider_name_hits}"
+    stale_name_hits = []
+    historical_name = b"scotty" + b"-1"
+    historical_record = ROOT / "provenance/artifacts.json"
+    for path in ROOT.rglob("*"):
+        if (
+            not path.is_file()
+            or ".git" in path.parts
+            or "tmp" in path.parts
+            or "__pycache__" in path.parts
+            or path.suffix == ".pyc"
+            or path == historical_record
+        ):
+            continue
+        if historical_name in path.read_bytes().lower():
+            stale_name_hits.append(str(path.relative_to(ROOT)))
+    assert not stale_name_hits, f"Stale public name found outside provenance: {stale_name_hits}"
     print(
         f"Verified {len(expected)} artifacts, {len(reproduction['helpers'])} helpers, "
         f"{len(vendor_expected)} vendored-source hashes, {len(python_files)} Python files, "

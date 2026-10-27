@@ -38,14 +38,14 @@ artifact tree expected by the historical scripts.
 ## Checkpoint download
 
 The complete checkpoint is hosted privately at
-[`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1). Authenticate
+[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty). Authenticate
 with an account that has access, then download it without placing the weights
 in Git:
 
 ```bash
 python3 -m pip install huggingface_hub
 hf auth login
-python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty-1", local_dir="scotty-1-checkpoint"))'
+python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty", local_dir="scotty-checkpoint"))'
 ```
 
 The same repository can later be made public only after a separate release
@@ -75,7 +75,7 @@ Verify it without importing PyTorch or loading weights:
 
 ```bash
 python3 tools/run_local_checkpoint.py \
-  --checkpoint scotty-1-checkpoint \
+  --checkpoint scotty-checkpoint \
   --verify-only
 ```
 
@@ -97,11 +97,13 @@ verification target.
 - Paper PDF hash, page count, and visual inspection performed during packaging.
 
 The checkpoint upload was verified by a clean download and SHA-256 comparison.
-On 26 October 2026 PT, the exact frozen checkpoint was loaded in the recovered
-project environment on the NVIDIA GB10 and the documented two-option smoke
-example completed successfully: it selected `true` with probability 0.8872,
-using 31 input tokens without truncation. Training and full evaluation were not
-rerun, and a new clean environment has not yet reproduced full inference.
+On 26 October 2026 PT, revision `b5d500fd94409a2f404e8d204fcd2dbd0c9200ad`
+was downloaded from `DarwinGuru/scotty`, its exact checkpoint was loaded in the
+recovered project environment on the NVIDIA GB10, and the documented two-option
+smoke example completed successfully: it selected `true` with probability
+0.8872, using 31 input tokens without truncation. Training and full evaluation
+were not rerun, and a new clean environment has not yet reproduced full
+inference.
 
 Raw rows remain excluded and training was out of scope. The Python files are
 verified source, not a claim that end-to-end training was reproduced from a

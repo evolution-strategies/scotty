@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify and run an authorized local Scotty-1 checkpoint.
+"""Verify and run an authorized local Scotty checkpoint.
 
 The checkpoint is intentionally not downloaded by this script. It must already
 exist as a local Laya-format directory.

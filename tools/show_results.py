@@ -24,7 +24,7 @@ def main() -> None:
         ("Typed official, hard", model["typed_official_test"]["hard_accuracy"], control["typed_official_test"]["hard_accuracy"]),
         ("Typed official, soft", model["typed_official_test"]["soft_teacher_agreement"], control["typed_official_test"]["soft_teacher_agreement"]),
     ]
-    print(f"{'Evaluation':30} {'Scotty-1':>10} {'Typed-only':>10}")
+    print(f"{'Evaluation':30} {'Scotty':>10} {'Typed-only':>10}")
     for label, scotty, typed_only in rows:
         print(f"{label:30} {pct(scotty):>10} {pct(typed_only):>10}")
 

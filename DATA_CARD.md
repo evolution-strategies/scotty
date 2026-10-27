@@ -44,7 +44,7 @@ source/split hashes are recorded in [`provenance/artifacts.json`](provenance/art
 No private DGX pilot data was used in this model.
 
 The root Apache-2.0 license covers original project software and intended
-Scotty-1 weights, not the synthetic rows. The Typed Decisions dataset and
+Scotty weights, not the synthetic rows. The Typed Decisions dataset and
 upstream model/code terms must be checked at the exact revisions before
 redistribution. Do not infer row-level redistribution rights from hashes,
 citations, or this private repository.

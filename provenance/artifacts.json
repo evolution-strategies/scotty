@@ -6,22 +6,27 @@
     "verified_non_checksum_files": 68
   },
   "model": {
-    "public_name": "Scotty-1",
+    "public_name": "Scotty",
+    "historical_public_names": [
+      "Scotty-1"
+    ],
     "selected_checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
     "checkpoint_in_git": false,
     "base_model": "answerdotai/ModernBERT-large",
     "base_revision": "45bb4654a4d5aaff24dd11d4781fa46d39bf8c13"
   },
   "hosting": {
-    "huggingface_repo": "DarwinGuru/scotty-1",
+    "huggingface_repo": "DarwinGuru/scotty",
     "repo_type": "model",
     "private": true,
     "checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
     "checkpoint_in_git": false,
-    "verified_huggingface_commit": "b377f2ab1b92c3f114bea9fc70e4a619c04fe04b"
+    "verified_huggingface_commit": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad"
   },
   "verification": {
     "smoke_inference_date_pt": "2026-10-26",
+    "download_repo": "DarwinGuru/scotty",
+    "download_revision": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad",
     "checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
     "environment": "recovered project environment",
     "accelerator": "NVIDIA GB10",
@@ -40,8 +45,8 @@
     "row_level_predictions_in_git": false
   },
   "paper": {
-    "scotty_1_pdf_sha256": "e9f9a7c3a083eab49983343436ca9ddba1f352661bb6758b008b2c35091fb54b",
-    "scotty_1_pages": 6,
+    "scotty_pdf_sha256": "1890b0b46705e589968ee3940e539f756b72422a45b70d300ffa2ffacf0846b6",
+    "scotty_pages": 6,
     "paper_source_in_git": false
   },
   "reproduction": {

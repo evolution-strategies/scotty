@@ -1,8 +1,8 @@
-# Model card: Scotty-1
+# Model card: Scotty
 
 ## Summary
 
-Scotty-1 is a 421,293,827-parameter typed decision model. Its 394,781,696-
+Scotty is a 421,293,827-parameter typed decision model. Its 394,781,696-
 parameter encoder is initialized from `answerdotai/ModernBERT-large` revision
 `45bb4654a4d5aaff24dd11d4781fa46d39bf8c13`; its 26,512,131-parameter head is
 newly initialized at seed 0. The head count includes a 263,938-parameter
@@ -39,12 +39,12 @@ BF16 autocast, full encoder fine-tuning, and gradient checkpointing.
 The selected checkpoint SHA-256 is
 `b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783`.
 Weights are not stored in Git. The complete checkpoint is hosted privately at
-[`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1), including
+[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty), including
 the encoder and tokenizer files required by the Laya-format loader.
 
 ## Intended use
 
-Scotty-1 is a research artifact for studying compact, local, candidate-scoring
+Scotty is a research artifact for studying compact, local, candidate-scoring
 decision interfaces. It is suitable for reproduction work and controlled
 experiments after the private checkpoint and separate data have been obtained
 under appropriate terms.

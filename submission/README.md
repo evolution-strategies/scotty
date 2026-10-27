@@ -23,9 +23,9 @@ granted to Reflection for competition administration and promotion.
 
 | Asset | Location | Current state | Needed for entry |
 |---|---|---|---|
-| Complete checkpoint and model card | <https://huggingface.co/DarwinGuru/scotty-1> | Private | Must be public during judging |
-| Source, reproducibility, results, and paper | <https://github.com/evolution-strategies/scotty-1> | Private | Public is strongly recommended so judges can run the documented loader |
-| Paper PDF | `paper/scotty-1-paper.pdf` | Packaged | Keep manuscript license separate |
+| Complete checkpoint and model card | <https://huggingface.co/DarwinGuru/scotty> | Private | Must be public during judging |
+| Source, reproducibility, results, and paper | <https://github.com/evolution-strategies/scotty> | Private | Public is strongly recommended so judges can run the documented loader |
+| Paper PDF | `paper/scotty-paper.pdf` | Packaged | Keep manuscript license separate |
 | Discussion entry | Draft below | Not posted | Post only after links are anonymously accessible |
 
 Raw datasets and row-level predictions are not part of the proposed entry.
@@ -41,7 +41,7 @@ decision task families, then train a 421M-parameter ModernBERT model with a
 shared candidate-scoring head. Candidates are evaluated jointly in one encoder
 pass rather than by independent prompting.
 
-**Evidence.** Scotty-1 reaches 83.03% raw and 76.39% position-balanced accuracy
+**Evidence.** Scotty reaches 83.03% raw and 76.39% position-balanced accuracy
 on a protected three-family Beam holdout. A matched-update Typed-only control
 reaches 56.34% and 51.64%, respectively. The control is included to make the
 coverage-specialization tradeoff explicit rather than claim universal gains.
@@ -52,23 +52,23 @@ results, and reproduction records.
 
 ## Ready-to-post discussion entry
 
-> **Scotty-1 — compact typed decisions learned from Beam**
+> **Scotty — compact typed decisions learned from Beam**
 >
-> Scotty-1 turns synthetic supervision from Reflection Beam 1.0 501B-A23B into
+> Scotty turns synthetic supervision from Reflection Beam 1.0 501B-A23B into
 > a 421M-parameter local candidate-scoring model. Beam generated typed decisions
-> across 18 task families; Scotty-1 jointly scores all candidate answers in one
+> across 18 task families; Scotty jointly scores all candidate answers in one
 > ModernBERT encoder pass instead of generating free-form text.
 >
 > On a protected holdout containing three entire Beam-generated task families,
-> Scotty-1 reaches 83.03% raw and 76.39% position-balanced accuracy. The repo
+> Scotty reaches 83.03% raw and 76.39% position-balanced accuracy. The repo
 > includes a matched-update Typed-only control, full checkpoint, checksum,
 > loading instructions, aggregate results, reproducibility documentation, and a
 > six-page paper. We report the single-seed and retrospective-test limitations
 > directly.
 >
-> 🤗 Model: https://huggingface.co/DarwinGuru/scotty-1
+> 🤗 Model: https://huggingface.co/DarwinGuru/scotty
 >
-> 💻 Source and paper: https://github.com/evolution-strategies/scotty-1
+> 💻 Source and paper: https://github.com/evolution-strategies/scotty
 
 ## Final publication sequence
 
@@ -79,7 +79,7 @@ results, and reproduction records.
    and a fresh anonymous-read test.
 4. Update release-state wording and provenance in one final commit.
 5. With explicit approval, make the GitHub repository public.
-6. With explicit approval, make `DarwinGuru/scotty-1` public.
+6. With explicit approval, make `DarwinGuru/scotty` public.
 7. Confirm both URLs load anonymously and that the model files download.
 8. With explicit approval, post the prepared entry to the official discussion.
 9. Record the public commits, timestamps, and posted discussion URL.

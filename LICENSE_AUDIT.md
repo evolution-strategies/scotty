@@ -3,7 +3,7 @@
 Status: private preparation only, reviewed 26 October 2026. This is an evidence
 summary and release checklist, not legal advice or blanket rights clearance.
 Apache-2.0 has been selected for the original project software and intended
-Scotty-1 checkpoint under the boundaries in [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md).
+Scotty checkpoint under the boundaries in [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md).
 
 ## Upstream materials
 
@@ -12,7 +12,7 @@ Scotty-1 checkpoint under the boundaries in [`LICENSE_SCOPE.md`](LICENSE_SCOPE.m
 | ModernBERT-large backbone | [`answerdotai/ModernBERT-large` README at `45bb4654…`](https://huggingface.co/answerdotai/ModernBERT-large/blob/45bb4654a4d5aaff24dd11d4781fa46d39bf8c13/README.md) | The pinned model card declares Apache-2.0 for the architecture, weights, and training code. No separate `LICENSE` or `NOTICE` was found in the pinned tree during this audit. | Preserve the pinned attribution and recheck the tree immediately before release. |
 | Laya code/head format | [`NandhaKishorM/laya` license](https://github.com/NandhaKishorM/laya/blob/main/LICENSE); run-time commit `eba3b036…` | Full Apache License 2.0 text. The exact run-time checkout and license are vendored here; its one-line local change is documented in `reproduction/vendor/laya_checkout/PROVENANCE.md`. | Keep the included license and change notice with every distribution containing Laya code. |
 | Typed Decisions | [`LocalLLaMA/typed-decisions` README at `468b1461…`](https://huggingface.co/datasets/LocalLLaMA/typed-decisions/blob/468b1461d59e01d6404e1cf37431da962acd43a0/README.md) | The pinned dataset card declares Apache-2.0. No separate `LICENSE` or `NOTICE` was found in the pinned tree during this audit. | Recheck row-level provenance and redistribution rights before publishing any rows. Aggregate metrics do not substitute for that review. |
-| Reflection Beam teacher | [`reflection/Beam-1.0-501B-A23B` license](https://huggingface.co/reflection/Beam-1.0-501B-A23B/blob/main/LICENSE) | The published model carries a full Apache License 2.0. Scotty-1 used Reflection Beam through Hugging Face Inference Providers; it did not train from a local Beam checkpoint. | Keep model attribution, and separately resolve the hosted-inference terms governing generated outputs. |
+| Reflection Beam teacher | [`reflection/Beam-1.0-501B-A23B` license](https://huggingface.co/reflection/Beam-1.0-501B-A23B/blob/main/LICENSE) | The published model carries a full Apache License 2.0. Scotty used Reflection Beam through Hugging Face Inference Providers; it did not train from a local Beam checkpoint. | Keep model attribution, and separately resolve the hosted-inference terms governing generated outputs. |
 
 Apache-2.0 now applies to the original code and intended checkpoint as described
 in `LICENSE_SCOPE.md`. It does **not** license the paper or data automatically,
@@ -51,9 +51,9 @@ separate approval.
 
 - GitHub: code, configs, aggregate results, paper PDF, documentation, and the
   vendored Laya license/provenance.
-- Hugging Face model repository: the approximately 0.8 GB Scotty-1 checkpoint,
+- Hugging Face model repository: the approximately 0.8 GB Scotty checkpoint,
   model card, checksum, and Apache-2.0 license are now hosted privately at
-  [`DarwinGuru/scotty-1`](https://huggingface.co/DarwinGuru/scotty-1).
+  [`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty).
 - Optional Hugging Face Space: a small demonstration that loads the approved
   model repository, with the README explicitly explaining Beam's role.
 - Keep raw datasets and row-level predictions out unless their separate review
