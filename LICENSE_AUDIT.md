@@ -1,7 +1,7 @@
 # Licensing and release-readiness audit
 
-Status: private preparation only, reviewed 26 October 2026. This is an evidence
-summary and release checklist, not legal advice or blanket rights clearance.
+Status: release-readiness review, updated 30 October 2026. This is an evidence
+summary, not legal advice or blanket rights clearance.
 Apache-2.0 has been selected for the original project software and intended
 Scotty checkpoint under the boundaries in [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md).
 
@@ -23,7 +23,7 @@ override third-party terms, or establish blanket rights clearance.
 The [Hugging Face Terms of Service](https://huggingface.co/terms-of-service) and
 linked Inference Providers supplemental terms reviewed here did not provide an
 explicit distillation permission or an explicit answer that supersedes the
-underlying hosted provider's terms. Before a public release, review the terms
+underlying hosted provider's terms. Before redistribution, review the terms
 actually accepted by the account, any order form, and the provider-routing
 terms applicable at generation time. Obtain qualified clarification if the
 agreement remains unclear. This audit does not assert either compliance or
@@ -31,7 +31,7 @@ violation.
 
 Repository-facing attribution normalizes the teacher description to
 "Reflection Beam via Hugging Face Inference Providers." Detailed routing
-metadata remains in private frozen provenance outside this repository.
+metadata remains in separate frozen provenance outside this repository.
 
 ## Competition requirements
 
@@ -43,26 +43,22 @@ competition discussion by **2 November 2026 at 11:59 PM PT**. The rules require
 compliance with applicable third-party terms but do not name a specific project
 license.
 
-Nothing in this section authorizes publication. Keep this GitHub repository and
-the existing Hugging Face model repository private until the owner gives
-separate approval.
+Repository visibility and competition submission are managed separately from
+this audit.
 
 ## Recommended release shape
 
 - GitHub: code, configs, aggregate results, paper PDF, documentation, and the
   vendored Laya license/provenance.
 - Hugging Face model repository: the approximately 0.8 GB Scotty checkpoint,
-  model card, checksum, and Apache-2.0 license are now hosted privately at
+  model card, checksum, and Apache-2.0 license are hosted at
   [`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty).
 - Optional Hugging Face Space: a small demonstration that loads the approved
   model repository, with the README explicitly explaining Beam's role.
 - Keep raw datasets and row-level predictions out unless their separate review
   is complete.
 
-No public Hugging Face repository exists yet. The model ID above is real and
-private; publishing it remains a separate approval-gated action.
-
-## Questions that still block public release
+## Questions to resolve for release
 
 1. Which account, routing mode, terms version, and order form governed the
    teacher API calls?

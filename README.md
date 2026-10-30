@@ -5,7 +5,7 @@ and a set of candidate answers, then scores the candidates in one encoder pass.
 It combines a fresh `answerdotai/ModernBERT-large` backbone with a newly
 initialized Laya-format typed head. It does **not** load pretrained Laya weights.
 
-This private research repository packages the paper, frozen aggregate evidence,
+This research repository packages the paper, frozen aggregate evidence,
 model and training configuration, and the source that was available at freeze
 time. Raw datasets and row-level predictions are deliberately excluded. Their
 identities are recorded by hash in [`provenance/artifacts.json`](provenance/artifacts.json).
@@ -13,16 +13,13 @@ identities are recorded by hash in [`provenance/artifacts.json`](provenance/arti
 ## Complete model checkpoint on Hugging Face
 
 **The complete verified Scotty checkpoint is hosted at
-[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty).** The model
-repository is private today, so access requires authorization for that Hugging
-Face account. It contains the weights, encoder configuration, agent
-configuration, tokenizer, model card, and Apache-2.0 license. The weights stay
-out of Git history while the repository remains easy to make public later with
-an explicit release decision.
+[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty).** It contains
+the weights, encoder configuration, agent configuration, tokenizer, model card,
+and Apache-2.0 license. The weights stay out of Git history.
 
 ## Build with Beam
 
-Scotty is being prepared for the
+Scotty was developed for the
 [Build with Beam competition](https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5).
 Reflection Beam 1.0 501B-A23B served as the synthetic teacher for 19,878 typed
 decisions across 18 task families. Scotty turns that broad supervision into a
@@ -30,9 +27,8 @@ decisions across 18 task families. Scotty turns that broad supervision into a
 generating free-form text. Beam supplied supervision, not model weights; no
 local Beam checkpoint is part of Scotty.
 
-The competition package and ready-to-post entry are in
-[`submission/README.md`](submission/README.md). Publication and submission are
-separate approval-gated actions.
+The competition package and discussion-entry draft are in
+[`submission/README.md`](submission/README.md).
 
 ## Headline results
 
@@ -55,7 +51,7 @@ See [`RESULTS.md`](RESULTS.md) for definitions and caveats.
 - [`MODEL_CARD.md`](MODEL_CARD.md) and [`DATA_CARD.md`](DATA_CARD.md) - intended use, data provenance, and limitations.
 - [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) - verified commands and external-artifact requirements.
 - [`LICENSE_AUDIT.md`](LICENSE_AUDIT.md) - upstream terms evidence and unresolved release questions.
-- [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) - work required before any public release.
+- [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) - release and submission requirements.
 - [`submission/README.md`](submission/README.md) - official call summary, judging narrative, and ready-to-post entry.
 
 ## Decision interface
@@ -88,18 +84,16 @@ python3 tools/show_results.py
 ```
 
 Training and full evaluation still need the hashed datasets. Checkpoint
-inference uses the privately hosted Hugging Face model. Follow
+inference uses the Hugging Face model. Follow
 [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md); source and syntax paths are verified,
 but packaging did not rerun training or checkpoint inference.
 
-## Download and use the private checkpoint
+## Download and use the checkpoint
 
-Install the small Hub client, authenticate with an account that has access, and
-download the complete checkpoint:
+Install the Hub client and download the complete checkpoint:
 
 ```bash
 python3 -m pip install huggingface_hub
-hf auth login
 python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty", local_dir="scotty-checkpoint"))'
 ```
 
@@ -127,11 +121,10 @@ The command refuses a checkpoint whose `model.safetensors` does not match the
 recorded SHA-256. See [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) for the required
 directory layout and the environment evidence boundary.
 
-## License and release status
+## License scope
 
-This repository is intended to remain **private** until a separate competition
-release decision. Original Scotty software and intended checkpoint weights
-are under Apache-2.0; the manuscript, datasets, and third-party material are
-outside that grant. See [`LICENSE_SCOPE.md`](LICENSE_SCOPE.md),
+Original Scotty software and intended checkpoint weights are under Apache-2.0;
+the manuscript, datasets, and third-party material are outside that grant. See
+[`LICENSE_SCOPE.md`](LICENSE_SCOPE.md),
 [`THIRD_PARTY.md`](THIRD_PARTY.md), and
 [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md).

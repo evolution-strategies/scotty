@@ -117,6 +117,33 @@ class RepositoryFactsTest(unittest.TestCase):
         self.assertIn("2 November 2026 at 11:59 PM Pacific Time", submission)
         self.assertIn("DarwinGuru/scotty", submission)
 
+    def test_audience_docs_use_neutral_availability_wording(self) -> None:
+        audience_docs = (
+            "README.md",
+            "MODEL_CARD.md",
+            "REPRODUCIBILITY.md",
+            "LICENSE_AUDIT.md",
+            "DATA_CARD.md",
+            "THIRD_PARTY.md",
+            "RELEASE_CHECKLIST.md",
+            "huggingface/README.md",
+            "submission/README.md",
+        )
+        forbidden = (
+            "private repository",
+            "private model",
+            "hosted privately",
+            "private checkpoint",
+            "prepared privately",
+            "submission preparation",
+            "repository is private",
+            "remain **private**",
+        )
+        for relative in audience_docs:
+            text = (ROOT / relative).read_text().lower()
+            for phrase in forbidden:
+                self.assertNotIn(phrase, text, relative)
+
     def test_smoke_inference_record(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         verification = provenance["verification"]

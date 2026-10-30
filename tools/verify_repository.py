@@ -127,6 +127,34 @@ def main() -> None:
         "Ready-to-post discussion entry",
     ):
         assert required in submission, f"Submission package is missing: {required}"
+    audience_docs = (
+        "README.md",
+        "MODEL_CARD.md",
+        "REPRODUCIBILITY.md",
+        "LICENSE_AUDIT.md",
+        "DATA_CARD.md",
+        "THIRD_PARTY.md",
+        "RELEASE_CHECKLIST.md",
+        "huggingface/README.md",
+        "submission/README.md",
+    )
+    forbidden_availability_phrases = (
+        "private repository",
+        "private model",
+        "hosted privately",
+        "private checkpoint",
+        "prepared privately",
+        "submission preparation",
+        "repository is private",
+        "remain **private**",
+    )
+    availability_hits = []
+    for relative in audience_docs:
+        text = (ROOT / relative).read_text().lower()
+        for phrase in forbidden_availability_phrases:
+            if phrase in text:
+                availability_hits.append(f"{relative}: {phrase}")
+    assert not availability_hits, f"Stale availability wording found: {availability_hits}"
     provider_name_hits = []
     disallowed_provider_name = b"base" + b"ten"
     for path in ROOT.rglob("*"):

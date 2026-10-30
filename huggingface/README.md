@@ -81,8 +81,7 @@ b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783
 
 ## Download and run
 
-If repository access is restricted, authenticate with an authorized Hugging
-Face account first. Then:
+Download the checkpoint with `huggingface_hub`:
 
 ```python
 from huggingface_hub import snapshot_download
@@ -108,7 +107,7 @@ python3 tools/run_local_checkpoint.py \
 ```
 
 The exact frozen checkpoint completed this smoke inference successfully during
-submission preparation. Scotty is a custom decision-model checkpoint, not a
+release verification. Scotty is a custom decision-model checkpoint, not a
 drop-in Transformers text-classification pipeline.
 
 ## Limitations

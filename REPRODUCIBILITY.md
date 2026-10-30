@@ -37,19 +37,14 @@ artifact tree expected by the historical scripts.
 
 ## Checkpoint download
 
-The complete checkpoint is hosted privately at
-[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty). Authenticate
-with an account that has access, then download it without placing the weights
-in Git:
+The complete checkpoint is hosted at
+[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty). Download it
+without placing the weights in Git:
 
 ```bash
 python3 -m pip install huggingface_hub
-hf auth login
 python3 -c 'from huggingface_hub import snapshot_download; print(snapshot_download("DarwinGuru/scotty", local_dir="scotty-checkpoint"))'
 ```
-
-The same repository can later be made public only after a separate release
-approval. No visibility change is implied by these instructions.
 
 ## Full training and evaluation: external artifacts required
 
@@ -57,11 +52,11 @@ The source dependency closure is now included, but execution still needs:
 
 1. The Beam-generated and Typed Decisions split files whose hashes are recorded
    in `provenance/artifacts.json`.
-2. For evaluation/inference, the private Hugging Face checkpoint plus tokenizer
+2. For evaluation/inference, the Hugging Face checkpoint plus tokenizer
    with the recorded model hash.
 3. A CUDA-capable environment compatible with the recorded run.
 
-For inference, an authorized local checkpoint must have this Laya layout:
+For inference, a local checkpoint must have this Laya layout:
 
 ```text
 selected_checkpoint/

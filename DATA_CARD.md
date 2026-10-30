@@ -7,7 +7,7 @@ The teacher was Reflection Beam 1.0 501B-A23B, accessed through Hugging Face
 Inference Providers. This was an API-served full model, not a local IQ1_S GGUF.
 Requests used temperature 0.65, high reasoning effort and JSON responses; one
 initial pilot used maximum effort. The displayed identity is provider-neutral;
-detailed routing metadata remains in private frozen provenance outside Git.
+detailed routing metadata remains in separate frozen provenance outside Git.
 
 The protected holdout contains 3,259 examples from three entire families:
 
@@ -38,13 +38,13 @@ The official test is separate: 400 cases / 2,000 decisions.
 
 ## Availability and provenance
 
-Raw rows are not included. Row-level predictions are also excluded because a
-future public release needs a separate content and licensing review. Exact
+Raw rows are not included. Row-level predictions are also excluded pending a
+separate content and licensing review. Exact
 source/split hashes are recorded in [`provenance/artifacts.json`](provenance/artifacts.json).
-No private DGX pilot data was used in this model.
+No DGX pilot data was used in this model.
 
 The root Apache-2.0 license covers original project software and intended
 Scotty weights, not the synthetic rows. The Typed Decisions dataset and
 upstream model/code terms must be checked at the exact revisions before
 redistribution. Do not infer row-level redistribution rights from hashes,
-citations, or this private repository.
+citations, or this repository.

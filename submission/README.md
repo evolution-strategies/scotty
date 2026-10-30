@@ -1,7 +1,7 @@
 # Build with Beam submission package
 
-Status: prepared privately on 26 October 2026 PT. Nothing in this directory
-publishes the repositories or enters the competition.
+This directory records the submission requirements and discussion-entry draft.
+It does not itself post an entry to the competition.
 
 ## Official call
 
@@ -23,8 +23,8 @@ granted to Reflection for competition administration and promotion.
 
 | Asset | Location | Current state | Needed for entry |
 |---|---|---|---|
-| Complete checkpoint and model card | <https://huggingface.co/DarwinGuru/scotty> | Private | Must be public during judging |
-| Source, reproducibility, results, and paper | <https://github.com/evolution-strategies/scotty> | Private | Public is strongly recommended so judges can run the documented loader |
+| Complete checkpoint and model card | <https://huggingface.co/DarwinGuru/scotty> | Hosted | Must be publicly accessible during judging |
+| Source, reproducibility, results, and paper | <https://github.com/evolution-strategies/scotty> | Hosted | Anonymous access is recommended so judges can run the documented loader |
 | Paper PDF | `paper/scotty-paper.pdf` | Packaged | Keep manuscript license separate |
 | Discussion entry | Draft below | Not posted | Post only after links are anonymously accessible |
 
@@ -77,12 +77,8 @@ results, and reproduction records.
    confirm the competition's promotional license is acceptable.
 3. Run the repository verifier, tests, history/secret scan, checkpoint checksum,
    and a fresh anonymous-read test.
-4. Update release-state wording and provenance in one final commit.
-5. With explicit approval, make the GitHub repository public.
-6. With explicit approval, make `DarwinGuru/scotty` public.
-7. Confirm both URLs load anonymously and that the model files download.
-8. With explicit approval, post the prepared entry to the official discussion.
-9. Record the public commits, timestamps, and posted discussion URL.
-
-Steps 5, 6, and 8 are external publication actions and are intentionally not
-performed by preparation work alone.
+4. Confirm both repositories present the final audience-facing documentation.
+5. Confirm the GitHub source and paper load anonymously.
+6. Confirm `DarwinGuru/scotty` is publicly accessible and its model files download.
+7. Post the prepared entry to the official discussion.
+8. Record the release commits, timestamps, and posted discussion URL.

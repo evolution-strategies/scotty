@@ -14,12 +14,12 @@
 - Synthetic teacher: Reflection Beam 1.0 501B-A23B, accessed through Hugging
   Face Inference Providers. The published Beam model carries an Apache-2.0
   license, while the applicable hosted-inference terms remain a separate
-  release question. Detailed routing metadata is retained in private frozen
+  release question. Detailed routing metadata is retained in separate frozen
   provenance outside Git.
 
 The reproduction bundle contains third-party and project-local code and is not
 presented as wholly original work. Apache-2.0 applies only within
-[`LICENSE_SCOPE.md`](LICENSE_SCOPE.md). Before public release, preserve all
+[`LICENSE_SCOPE.md`](LICENSE_SCOPE.md). Before redistribution, preserve all
 upstream notices and resolve the redistribution status of every included file,
 the checkpoint, both datasets, and the paper PDF.
 
