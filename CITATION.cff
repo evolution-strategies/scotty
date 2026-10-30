@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use Scotty, please cite the research draft."
-title: "Scotty: Learning Fast Typed Decisions from Synthetic Supervision"
+title: "Scotty: A Compact System-1 Decision Model Trained with Beam"
 type: article
 authors:
   - family-names: Kramer
