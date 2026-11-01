@@ -115,7 +115,7 @@ class RepositoryFactsTest(unittest.TestCase):
         hosting = provenance["hosting"]
         self.assertEqual(hosting["huggingface_repo"], "DarwinGuru/scotty")
         self.assertEqual(hosting["repo_type"], "model")
-        self.assertTrue(hosting["private"])
+        self.assertFalse(hosting["private"])
         self.assertFalse(hosting["checkpoint_in_git"])
         self.assertEqual(
             hosting["checkpoint_sha256"],

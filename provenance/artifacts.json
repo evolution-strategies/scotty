@@ -9,7 +9,7 @@
   "hosting": {
     "huggingface_repo": "DarwinGuru/scotty",
     "repo_type": "model",
-    "private": true,
+    "private": false,
     "checkpoint_sha256": "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda",
     "checkpoint_in_git": false,
     "verified_huggingface_commit": "6e7e7e69a21eea966469757eba682c1f59e7d8fb"

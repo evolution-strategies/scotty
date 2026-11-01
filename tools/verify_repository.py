@@ -102,7 +102,7 @@ def main() -> None:
     hosting = provenance["hosting"]
     assert hosting["huggingface_repo"] == "DarwinGuru/scotty"
     assert hosting["repo_type"] == "model"
-    assert hosting["private"] is True
+    assert hosting["private"] is False
     assert hosting["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
     assert hosting["checkpoint_in_git"] is False
     assert len(hosting["verified_huggingface_commit"]) == 40
