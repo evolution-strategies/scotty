@@ -1,26 +1,22 @@
 {
   "beam_generated": {
     "accepted_total": 19878,
-    "train": 13292,
+    "training": 13292,
     "validation": 3327,
-    "protected_test": 3259,
-    "protected_test_families": {
-      "operational_evidence_strength": 935,
-      "packing_readiness": 1146,
-      "warehouse_exception_routing": 1178
-    }
+    "group_safe_source_audit": 1344,
+    "task_families": 18
   },
   "typed_decisions": {
-    "train_cases": 960,
-    "train_decisions": 4800,
-    "validation_cases": 240,
+    "training_decisions": 4800,
     "validation_decisions": 1200,
-    "official_test_cases": 400,
-    "official_test_decisions": 2000
+    "group_safe_source_audit_cases": 96,
+    "group_safe_source_audit_decisions": 480
   },
-  "combined": {
-    "train_decisions": 18092,
-    "validation_decisions": 4527,
-    "separate_test_decisions": 5259
+  "training": {
+    "unique_decisions": 18092,
+    "optimizer_updates": 849,
+    "effective_batch": 64,
+    "total_presentations": 54336,
+    "source_sampling": "50:50 Beam/Typed; uniform within source"
   }
 }

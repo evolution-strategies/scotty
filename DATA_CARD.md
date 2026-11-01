@@ -2,49 +2,48 @@
 
 ## Beam-generated decisions
 
-The accepted synthetic corpus contains 19,878 decisions across 18 task families.
-The teacher was Reflection Beam 1.0 501B-A23B, accessed through Hugging Face
-Inference Providers. This was an API-served full model, not a local IQ1_S GGUF.
-Requests used temperature 0.65, high reasoning effort and JSON responses; one
-initial pilot used maximum effort. The displayed identity is provider-neutral;
-detailed routing metadata remains in separate frozen provenance outside Git.
+Reflection Beam 1.0 501B-A23B generated typed decisions for boolean,
+categorical, and ordered questions across 18 operational task families. After
+filtering, the accepted collection contains 19,878 decisions.
 
-The protected holdout contains 3,259 examples from three entire families:
+The model uses 13,292 Beam decisions for training and 3,327 for validation.
+The group-safe source audit contains 1,344 Beam decisions. Related examples are
+kept together when splitting.
 
-- operational evidence strength: 935;
-- packing readiness: 1,146;
-- warehouse exception routing: 1,178.
-
-The other 15 families contribute 13,292 training and 3,327 validation examples.
-Generation requests and reviewed duplicate links form components constrained to
-one split. Allocation used neither targets nor model performance. Validation
-shares families with training, while the holdout uses different families.
+Beam was accessed through Hugging Face Inference Providers. Beam supplied
+supervision, not model weights. The dataset-generation calls stayed within the
+$25 participant credit budget, excluding local training and hardware costs.
 
 ## Typed Decisions
 
 Source: `LocalLLaMA/typed-decisions`, revision
-`468b1461d59e01d6404e1cf37431da962acd43a0`. The official 1,200 training cases
-(6,000 decisions) were split by workflow and kept case-disjoint: 960 cases /
-4,800 decisions for training and 240 cases / 1,200 decisions for validation.
-The official test is separate: 400 cases / 2,000 decisions.
+`468b1461d59e01d6404e1cf37431da962acd43a0`.
 
-## Exact split table
+Scotty uses 4,800 decisions for training and 1,200 for validation. The source
+audit contains 480 decisions from 96 cases. All decisions from one case remain
+in the same group.
 
-| Source | Train | Validation | Test |
-|---|---:|---:|---:|
-| Beam-generated | 13,292 | 3,327 | 3,259 |
-| Typed Decisions | 4,800 | 1,200 | 2,000 |
-| Total decisions | 18,092 | 4,527 | 5,259 |
+Typed targets can assign weight to more than one candidate. Scotty trains
+against those soft distributions; Beam targets are one-hot.
 
-## Availability and provenance
+## Sampling
 
-Raw rows are not included. Row-level predictions are also excluded pending a
-separate content and licensing review. Exact
-source/split hashes are recorded in [`provenance/artifacts.json`](provenance/artifacts.json).
-No DGX pilot data was used in this model.
+Every effective training batch is split equally between the two sources:
+50% Beam-generated and 50% Typed Decisions. Sampling is uniform within each
+source. This balances source presentations, not token counts or compute.
 
-The root Apache-2.0 license covers original project software and intended
-Scotty weights, not the synthetic rows. The Typed Decisions dataset and
-upstream model/code terms must be checked at the exact revisions before
-redistribution. Do not infer row-level redistribution rights from hashes,
-citations, or this repository.
+## Audit boundary
+
+Audit groups are excluded from the final run's training and validation. The
+audit nevertheless comes from the same source collections used by the project,
+so it is not an external or fresh-distribution benchmark.
+
+## Availability and rights
+
+Raw rows and row-level predictions are not stored in this repository. Exact
+source identities and hashes are recorded in
+[`provenance/artifacts.json`](provenance/artifacts.json).
+
+The root Apache-2.0 license covers original Scotty code and intended checkpoint
+weights, not the datasets. Review the source datasets' exact terms before
+redistributing any rows.

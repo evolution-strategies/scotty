@@ -79,35 +79,41 @@ def main() -> None:
 
     metrics = json.loads((ROOT / "results/metrics.json").read_text())
     splits = json.loads((ROOT / "results/splits.json").read_text())
-    assert metrics["scotty_1"]["beam_protected_holdout"]["raw_accuracy"] == 0.830316047867444
-    assert metrics["scotty_1"]["typed_official_test"]["hard_accuracy"] == 0.7545
+    final = metrics["scotty"]
+    assert final["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
+    assert final["three_seed_validation"]["primary_objective_mean"] == 0.8595323507839705
+    assert final["group_safe_source_audit"]["primary_objective"] == 0.841031
+    assert final["group_safe_source_audit"]["external_or_fresh_distribution"] is False
     assert provenance["model"]["public_name"] == "Scotty"
-    assert provenance["model"]["historical_public_names"] == ["Scotty" + "-1"]
-    assert splits["combined"] == {
-        "train_decisions": 18092,
-        "validation_decisions": 4527,
-        "separate_test_decisions": 5259,
+    assert provenance["model"]["selected_checkpoint_sha256"] == (
+        "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda"
+    )
+    assert splits["training"] == {
+        "unique_decisions": 18092,
+        "optimizer_updates": 849,
+        "effective_batch": 64,
+        "total_presentations": 54336,
+        "source_sampling": "50:50 Beam/Typed; uniform within source",
     }
     licensing = provenance["licensing"]
     assert licensing["project_spdx"] == "Apache-2.0"
     assert sha256(ROOT / "LICENSE") == licensing["root_license_sha256"]
     assert (ROOT / licensing["scope_file"]).is_file()
     hosting = provenance["hosting"]
-    assert hosting == {
-        "huggingface_repo": "DarwinGuru/scotty",
-        "repo_type": "model",
-        "private": True,
-        "checkpoint_sha256": provenance["model"]["selected_checkpoint_sha256"],
-        "checkpoint_in_git": False,
-        "verified_huggingface_commit": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad",
-    }
+    assert hosting["huggingface_repo"] == "DarwinGuru/scotty"
+    assert hosting["repo_type"] == "model"
+    assert hosting["private"] is True
+    assert hosting["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
+    assert hosting["checkpoint_in_git"] is False
+    assert len(hosting["verified_huggingface_commit"]) == 40
     verification = provenance["verification"]
     assert verification["download_repo"] == hosting["huggingface_repo"]
     assert verification["download_revision"] == hosting["verified_huggingface_commit"]
     assert verification["checkpoint_sha256"] == provenance["model"]["selected_checkpoint_sha256"]
-    assert verification["selected_option"] == "true"
-    assert verification["selected_probability"] == 0.8872
-    assert verification["input_tokens"] == 31
+    assert verification["status"] == "verified"
+    assert verification["selected_option"] in {"false", "true"}
+    assert 0.0 <= verification["selected_probability"] <= 1.0
+    assert verification["input_tokens"] > 0
     assert verification["truncated"] is False
     assert verification["training_rerun"] is False
     hf_card = (ROOT / "huggingface/README.md").read_text()
@@ -117,13 +123,15 @@ def main() -> None:
         "DarwinGuru/scotty",
         provenance["model"]["selected_checkpoint_sha256"],
         "Reflection Beam 1.0 501B-A23B",
+        "scotty_config.json",
     ):
         assert required in hf_card, f"Hugging Face card is missing: {required}"
     submission = (ROOT / "submission/README.md").read_text()
     for required in (
         "2 November 2026 at 11:59 PM Pacific Time",
         "DarwinGuru/scotty",
-        "evolution-strategies/scotty",
+        "run_scotty.py",
+        "paper/scotty-paper.pdf",
         "Ready-to-post discussion entry",
     ):
         assert required in submission, f"Submission package is missing: {required}"

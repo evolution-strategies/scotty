@@ -1,10 +1,10 @@
 cff-version: 1.2.0
-message: "If you use Scotty, please cite the research draft."
-title: "Scotty: A Compact System-1 Decision Model Trained with Beam"
+message: "If you use Scotty, please cite the accompanying paper."
+title: "Scotty: A Compact System-1 Decision Model with Balanced Beam Supervision"
 type: article
 authors:
   - family-names: Kramer
     given-names: Oliver
-date-released: 2026-10-24
+date-released: 2026-11-01
 repository-code: "https://github.com/evolution-strategies/scotty"
-abstract: "A compact ModernBERT typed-decision model trained with mixed synthetic supervision."
+abstract: "A compact ModernBERT decision model trained with equally sampled Beam-generated and Typed Decisions supervision."

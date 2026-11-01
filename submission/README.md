@@ -1,84 +1,60 @@
 # Build with Beam submission package
 
-This directory records the submission requirements and discussion-entry draft.
-It does not itself post an entry to the competition.
+This directory contains a concise draft for the competition discussion. It does
+not post or submit anything.
 
 ## Official call
 
-- [Competition discussion](https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5)
-- [Official rules](https://reflection.ai/legal/official-rules-build-with-beam)
-- Submission deadline: **2 November 2026 at 11:59 PM Pacific Time**.
-- Required entry: a publicly accessible Hugging Face Space, model repository,
-  or dataset repository; documentation of the project and how Beam was used;
-  and a link posted to the competition discussion before the deadline.
-- Judging: creativity/originality, technical execution, usefulness/impact, and
-  innovative/effective use of Beam, each weighted 25%.
-- Prizes: $9,000, $7,000, and $4,000 for first through third place.
+- Competition discussion: <https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5>
+- Official rules: <https://reflection.ai/legal/official-rules-build-with-beam>
+- Deadline: **2 November 2026 at 11:59 PM Pacific Time**.
+- Required entry: a publicly accessible Hugging Face Space, model, or dataset;
+  documentation of the project and Beam's role; and a discussion link before
+  the deadline.
 
-The official rules control if this summary differs from them. They also cover
-eligibility, taxes, required winner verification, publicity, and the license
-granted to Reflection for competition administration and promotion.
+The official rules control if this summary differs from them.
 
 ## Submission assets
 
-| Asset | Location | Current state | Needed for entry |
-|---|---|---|---|
-| Complete checkpoint and model card | <https://huggingface.co/DarwinGuru/scotty> | Hosted | Must be publicly accessible during judging |
-| Source, reproducibility, results, and paper | <https://github.com/evolution-strategies/scotty> | Hosted | Anonymous access is recommended so judges can run the documented loader |
-| Paper PDF | `paper/scotty-paper.pdf` | Packaged | Keep manuscript license separate |
-| Discussion entry | Draft below | Not posted | Post only after links are anonymously accessible |
-
-Raw datasets and row-level predictions are not part of the proposed entry.
-
-## Judge-facing story
-
-**Problem.** Generative foundation models can supply broad decision knowledge,
-but many practical systems need only a quick, constrained choice among known
-options.
-
-**Approach.** Use Reflection Beam as a synthetic teacher across 18 typed-
-decision task families, then train a 421M-parameter ModernBERT model with a
-shared candidate-scoring head. Candidates are evaluated jointly in one encoder
-pass rather than by independent prompting.
-
-**Evidence.** Scotty reaches 83.03% raw and 76.39% position-balanced accuracy
-on a protected three-family Beam holdout. A matched-update Typed-only control
-reaches 56.34% and 51.64%, respectively. The control is included to make the
-coverage-specialization tradeoff explicit rather than claim universal gains.
-
-**Usefulness.** The result is a downloadable local decision model with a small,
-auditable output space, complete checkpoint, checksum, loader, paper, aggregate
-results, and reproduction records.
+- Model and documentation: <https://huggingface.co/DarwinGuru/scotty>
+- Inference source: <https://huggingface.co/DarwinGuru/scotty/blob/main/run_scotty.py>
+- Paper: <https://huggingface.co/DarwinGuru/scotty/blob/main/paper/scotty-paper.pdf>
+- Demo: <https://spark-29fd.taile0f6e8.ts.net>
 
 ## Ready-to-post discussion entry
 
-> **Scotty — compact typed decisions learned from Beam**
+> **Scotty — compact decisions learned from Beam**
 >
-> Scotty turns synthetic supervision from Reflection Beam 1.0 501B-A23B into
-> a 421M-parameter local candidate-scoring model. Beam generated typed decisions
-> across 18 task families; Scotty jointly scores all candidate answers in one
-> ModernBERT encoder pass instead of generating free-form text.
+> Scotty turns typed supervision from Reflection Beam 1.0 501B-A23B into a
+> 421-million-parameter local decision model. Given a situation, question, and
+> candidate answers, it scores all candidates jointly in one ModernBERT forward
+> pass instead of generating free-form text.
 >
-> On a protected holdout containing three entire Beam-generated task families,
-> Scotty reaches 83.03% raw and 76.39% position-balanced accuracy. The repo
-> includes a matched-update Typed-only control, full checkpoint, checksum,
-> loading instructions, aggregate results, reproducibility documentation, and a
-> six-page paper. We report the single-seed and retrospective-test limitations
-> directly.
+> Beam generated decisions across 18 task families. Scotty trains with effective
+> batches split equally between Beam-generated examples and Typed Decisions.
+> Beam supplies supervision, not model weights. The generation calls stayed
+> within the $25 participant credit budget, excluding local training and hardware.
+>
+> Across three seeds, Scotty's mean validation objective is
+> 0.859532 ± 0.004603. On a group-safe source audit, the seed-0 model reaches
+> objective 0.841031, 76.67% Typed hard accuracy, 88.62% Beam raw accuracy, and
+> 91.54% Beam position-balanced accuracy. The audit uses withheld groups from
+> the same source collections and is not an external benchmark.
 >
 > 🤗 Model: https://huggingface.co/DarwinGuru/scotty
 >
-> 💻 Source and paper: https://github.com/evolution-strategies/scotty
+> 💻 Inference code: https://huggingface.co/DarwinGuru/scotty/blob/main/run_scotty.py
+>
+> 📄 Paper: https://huggingface.co/DarwinGuru/scotty/blob/main/paper/scotty-paper.pdf
+>
+> 🧪 Demo: https://spark-29fd.taile0f6e8.ts.net (login-protected; access available on request)
 
-## Final publication sequence
+## Before posting
 
-1. Confirm entrant/team identity and eligibility under the official rules.
-2. Resolve the rights and hosted-inference questions in `LICENSE_AUDIT.md` and
-   confirm the competition's promotional license is acceptable.
-3. Run the repository verifier, tests, history/secret scan, checkpoint checksum,
-   and a fresh anonymous-read test.
-4. Confirm both repositories present the final audience-facing documentation.
-5. Confirm the GitHub source and paper load anonymously.
-6. Confirm `DarwinGuru/scotty` is publicly accessible and its model files download.
-7. Post the prepared entry to the official discussion.
-8. Record the release commits, timestamps, and posted discussion URL.
+1. Confirm entrant identity and eligibility.
+2. Confirm the competition's promotional terms are acceptable.
+3. Run repository tests, checkpoint verification, and a fresh anonymous download.
+4. Confirm the public Hugging Face model, source, and paper are accessible to
+   judges; arrange demo access separately.
+5. Change visibility only with explicit approval.
+6. Post the discussion entry only with explicit approval.

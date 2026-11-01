@@ -8,18 +8,23 @@ exist as a local Laya-format directory.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import hashlib
 import json
+import os
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 from typing import Sequence
 
 
 ROOT = Path(__file__).resolve().parents[1]
 VENDORED_LAYA = ROOT / "reproduction/vendor/laya_checkout"
-EXPECTED_MODEL_SHA256 = "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783"
+EXPECTED_MODEL_SHA256 = "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda"
+PUBLIC_CONFIG = "scotty_config.json"
+LEGACY_CONFIG = "rl_agent_config.json"
 REQUIRED_PATHS = (
-    "rl_agent_config.json",
     "model.safetensors",
     "tokenizer",
     "encoder",
@@ -39,6 +44,12 @@ def verify_checkpoint(checkpoint: Path, expected_sha256: str = EXPECTED_MODEL_SH
     if not checkpoint.is_dir():
         raise FileNotFoundError(f"Checkpoint directory not found: {checkpoint}")
     missing = [name for name in REQUIRED_PATHS if not (checkpoint / name).exists()]
+    config = next(
+        (checkpoint / name for name in (PUBLIC_CONFIG, LEGACY_CONFIG) if (checkpoint / name).is_file()),
+        None,
+    )
+    if config is None:
+        missing.append(f"{PUBLIC_CONFIG} (or legacy {LEGACY_CONFIG})")
     if missing:
         raise FileNotFoundError(f"Checkpoint is missing: {', '.join(missing)}")
     model_path = checkpoint / "model.safetensors"
@@ -50,9 +61,43 @@ def verify_checkpoint(checkpoint: Path, expected_sha256: str = EXPECTED_MODEL_SH
         )
     return {
         "checkpoint": str(checkpoint),
+        "config": config.name,
         "model_safetensors_sha256": actual,
         "status": "verified",
     }
+
+
+@contextmanager
+def laya_checkpoint_view(checkpoint: Path):
+    """Expose Scotty's neutral config name through Laya's legacy file layout."""
+    legacy = checkpoint / LEGACY_CONFIG
+    if legacy.is_file():
+        yield checkpoint
+        return
+
+    public = checkpoint / PUBLIC_CONFIG
+    with tempfile.TemporaryDirectory(prefix="scotty-laya-") as directory:
+        view = Path(directory)
+        shutil.copy2(public, view / LEGACY_CONFIG)
+
+        model_source = checkpoint / "model.safetensors"
+        model_target = view / "model.safetensors"
+        try:
+            os.link(model_source, model_target)
+        except OSError:
+            try:
+                os.symlink(model_source, model_target)
+            except OSError:
+                shutil.copy2(model_source, model_target)
+
+        for name in ("encoder", "tokenizer"):
+            source = checkpoint / name
+            target = view / name
+            try:
+                os.symlink(source, target, target_is_directory=True)
+            except OSError:
+                shutil.copytree(source, target)
+        yield view
 
 
 def choice_question(instruction: str, options: Sequence[str]) -> dict:
@@ -96,12 +141,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     sys.path.insert(0, str(VENDORED_LAYA))
     import laya
 
-    agent = laya.load(
-        verified["checkpoint"],
-        device=args.device,
-        expected_sha256={"model.safetensors": EXPECTED_MODEL_SHA256},
-    )
-    result = agent.predict(args.state, questions)
+    with laya_checkpoint_view(Path(verified["checkpoint"])) as laya_checkpoint:
+        agent = laya.load(
+            str(laya_checkpoint),
+            device=args.device,
+            expected_sha256={"model.safetensors": EXPECTED_MODEL_SHA256},
+        )
+        result = agent.predict(args.state, questions)
+    result["model"] = "Scotty"
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
 

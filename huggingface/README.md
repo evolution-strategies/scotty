@@ -12,116 +12,132 @@ tags:
 
 # Scotty
 
-Scotty is a **Build with Beam** competition entry: a compact, local typed-
-decision model trained with synthetic supervision from Reflection Beam. Given a
-state, an instruction, and a finite set of candidates, it scores every candidate
-jointly in one encoder pass.
+Scotty is a 421-million-parameter model for choosing among supplied options.
+It reads a situation, a question, and all candidate answers together, then
+scores the candidates in one ModernBERT forward pass. It supports boolean,
+categorical, and ordered decisions without generating free-form text.
 
-- Source, paper, reproducibility, and full results:
-  <https://github.com/evolution-strategies/scotty>
-- Competition call:
-  <https://huggingface.co/reflection/Beam-1.0-501B-A23B/discussions/5>
+- Inference code: [`run_scotty.py`](https://huggingface.co/DarwinGuru/scotty/blob/main/run_scotty.py)
+- Paper: [`paper/scotty-paper.pdf`](https://huggingface.co/DarwinGuru/scotty/blob/main/paper/scotty-paper.pdf)
+- Demo: <https://spark-29fd.taile0f6e8.ts.net> (access-controlled)
 
-## How Beam was used
+## How it works
 
-Reflection Beam 1.0 501B-A23B was used through Hugging Face Inference Providers
-as the synthetic teacher. It generated 19,878 typed decisions across 18 task
-families. Scotty trained on 13,292 of those decisions together with 4,800
-Typed Decisions examples; 3,327 Beam-generated decisions and 1,200 Typed
-Decisions examples were used for validation. Three entire Beam-generated task
-families, containing 3,259 decisions, were protected as a separate holdout.
+Scotty combines a pretrained `answerdotai/ModernBERT-large` encoder with a
+newly initialized two-layer Laya-format decision head. Each option receives a
+`[MASK]` marker. A shared scalar head scores those marker states, and softmax
+ranks the options. Candidates are encoded jointly rather than in separate
+chunks.
 
-Beam supplied supervision, not model weights. Scotty starts from a fresh
-`answerdotai/ModernBERT-large` encoder and a newly initialized two-layer
-Laya-format typed head. It does not load pretrained Laya weights or a local Beam
-checkpoint.
+The output values are comparative scores, not calibrated confidence. Scotty
+does not produce explanations or hidden reasoning.
 
-## Why it is useful
+## Training data
 
-Large generative models are powerful decision teachers, but many downstream
-workflows only need a fast, auditable choice among known options. Scotty
-turns that supervision into a 421,293,827-parameter local scorer with a shared
-head over option `[MASK]` positions. It supports boolean, categorical, and
-ordered candidate decisions without generating free-form text.
+Reflection Beam 1.0 501B-A23B generated 19,878 typed decisions across 18 task
+families. Beam supplied supervision, not weights. Training uses 13,292 of those
+decisions plus 4,800 examples from `LocalLLaMA/typed-decisions`.
 
-This is a research artifact rather than a calibrated autonomous decision-maker.
-Its intended value is reproducible study of compact decision interfaces and
-controlled local experiments.
+Every effective batch is split 50:50 between Beam-generated and Typed examples,
+with uniform sampling inside each source. The final model uses seed 0, 849
+optimizer updates, an effective batch size of 64, BF16 autocast, and full encoder
+fine-tuning.
+
+The Beam dataset-generation API calls stayed within the $25 participant credit
+budget. This excludes local training and hardware costs.
+
+### How Beam was used
+
+This Build with Beam project uses Reflection Beam 1.0 501B-A23B as the teacher
+that generated typed decision examples. Scotty does not contain Beam weights:
+it learns from the generated situations, questions, options, and target choices.
 
 ## Results
 
-| Evaluation | Scotty | Matched-update Typed-only control |
-|---|---:|---:|
-| Protected Beam-family holdout, raw | **83.03%** | 56.34% |
-| Protected Beam-family holdout, position-balanced | **76.39%** | 51.64% |
-| Official Typed Decisions test, hard | 75.45% | **78.35%** |
+Three training seeds obtain mean validation objective
+`0.859532 ± 0.004603` (mean ± sample standard deviation).
 
-The control demonstrates a coverage-specialization tradeoff, not blanket
-superiority. Results use one training seed, and the tests were retrospectively
-inspected. See the source repository for definitions, confidence intervals,
-aggregate reports, and limitations.
+| Group-safe source audit | Scotty |
+|---|---:|
+| Combined objective | 0.841031 |
+| Typed hard accuracy | 76.67% (368/480) |
+| Beam raw accuracy | 88.62% (1,191/1,344) |
+| Beam position-balanced accuracy | 91.54% |
 
-## Checkpoint contents
+The audit contains withheld groups from the same two source collections. It is
+not an external or fresh-distribution benchmark.
+
+## Files
 
 ```text
 .
 ├── model.safetensors
-├── rl_agent_config.json
+├── scotty_config.json
+├── run_scotty.py
+├── requirements.txt
+├── paper/scotty-paper.pdf
 ├── encoder/config.json
 └── tokenizer/
     ├── tokenizer.json
     └── tokenizer_config.json
 ```
 
+`scotty_config.json` records the encoder, decision-head shape, token budgets,
+precision, and release provenance. The included `run_scotty.py` adapter gives
+Laya 0.3.28 the legacy filename it expects only inside a temporary compatibility
+view; the published checkpoint does not use an RL-labelled manifest. Scotty was
+trained with supervised learning.
+
 `model.safetensors` SHA-256:
 
 ```text
-b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783
+e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda
 ```
 
 ## Download and run
 
-Download the checkpoint with `huggingface_hub`:
-
-```python
-from huggingface_hub import snapshot_download
-
-checkpoint = snapshot_download("DarwinGuru/scotty")
-print(checkpoint)
-```
-
-From the source repository checkout, verify and run the downloaded checkpoint:
-
 ```bash
-python3 tools/run_local_checkpoint.py \
-  --checkpoint /path/printed/by/snapshot_download \
+python3 -m pip install huggingface_hub
+python3 -c 'from huggingface_hub import snapshot_download; snapshot_download("DarwinGuru/scotty", local_dir="scotty")'
+cd scotty
+python3 -m pip install -r requirements.txt
+
+python3 run_scotty.py \
+  --checkpoint . \
   --verify-only
 
-python3 tools/run_local_checkpoint.py \
-  --checkpoint /path/printed/by/snapshot_download \
-  --device cuda \
+python3 run_scotty.py \
+  --checkpoint . \
+  --device cpu \
   --state "The shipment is sealed, labelled, and the manifest is signed." \
   --instruction "Is this shipment ready for dispatch?" \
   --option false \
   --option true
 ```
 
-The exact frozen checkpoint completed this smoke inference successfully during
-release verification. Scotty is a custom decision-model checkpoint, not a
-drop-in Transformers text-classification pipeline.
+Scotty is a custom Laya-format checkpoint, not a drop-in Transformers text-
+classification pipeline.
 
 ## Limitations
 
-- One training seed; intervals describe test-sample uncertainty, not training variability.
-- Both principal supervision sources are synthetic; unrelated real-world generalization is unknown.
-- Teacher labels are not guaranteed truth.
-- Probabilities were not deployment-calibrated.
-- The recorded 23.36 ms median is one batch-one, 350-token, four-option input on
-  an NVIDIA GB10, not a broad throughput claim.
+- Both supervision sources are synthetic; teacher errors can be learned.
+- Three seeds are a small sample.
+- The source audit is not an independent external test.
+- Scores require calibration before confidence-based automation.
+- No real-world deployment study or broad throughput benchmark is reported.
 
-## License and attribution
+## License
 
-The original Scotty checkpoint weights are provided under Apache-2.0. That
-grant does not automatically license datasets, the manuscript, or third-party
-material. The source repository preserves upstream licenses, pinned revisions,
-attribution, and the release-readiness audit.
+Original Scotty checkpoint weights are Apache-2.0. That grant does not
+automatically license datasets, the paper, or third-party material. This model
+card, the checkpoint configuration, and the release files record the relevant
+revisions, attribution, and license scope. See
+[`LICENSE_SCOPE.md`](https://huggingface.co/DarwinGuru/scotty/blob/main/LICENSE_SCOPE.md)
+for the files in this release.
+
+Key upstreams are `answerdotai/ModernBERT-large` revision
+`45bb4654a4d5aaff24dd11d4781fa46d39bf8c13`, Laya `0.3.28` (training checkout
+`eba3b0367643498e478ed02e870fa53737da5061`), and
+`LocalLLaMA/typed-decisions` revision
+`468b1461d59e01d6404e1cf37431da962acd43a0`. Each retains its own attribution
+and terms.

@@ -12,14 +12,15 @@ Complete the applicable items before competition submission or general release.
 - [ ] Confirm that Hugging Face visibility satisfies the competition requirements.
 - [ ] Review raw/row-level outputs for licensing, personal, proprietary, or harmful content.
 - [x] Package the project helper modules and record their provenance.
-- [x] Rerun one documented smoke inference on the exact frozen checkpoint in the recovered environment.
+- [x] Rerun one documented smoke inference on the exact final checkpoint.
+- [ ] Repeat that smoke inference from a fresh download of the recorded Hugging Face revision.
 - [ ] Recreate a clean, fully pinned environment and repeat checkpoint inference.
-- [x] State clearly that only seed 0 is available; do not imply multiple-seed evidence.
-- [x] Preserve the single-seed, retrospective-test, calibration, and generalization caveats.
+- [x] Separate the three-seed validation summary from the hosted seed-0 deployment checkpoint.
+- [x] Preserve the group-safe source-audit, calibration, and generalization caveats; do not call the audit external or fresh-distribution testing.
 - [x] Run a fresh credential/secret scan across the entire reachable Git history and release artifacts on 26 October 2026 PT.
 - [x] Remove paper source from every commit reachable through published Git refs; retain the provider-cache limitation documented in the audit record.
 - [x] Verify no machine paths, internal endpoints, credentials, raw data, or checkpoints entered reachable Git history; the only local-path string is a negative unit-test assertion.
 - [ ] Add a DOI only if one is actually issued; the citation draft intentionally has none.
-- [ ] Confirm that GitHub visibility supports anonymous access to the documented source and paper.
+- [ ] Confirm that the public Hugging Face repository independently provides the model, inference source, paper, and license information; GitHub visibility is managed separately.
 - [x] Prepare judge-facing Hugging Face documentation and a discussion-post draft in `submission/README.md`.
 - [ ] Publish the approved Hugging Face model and post its link before 2 November 2026 at 11:59 PM PT.

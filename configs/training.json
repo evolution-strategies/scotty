@@ -17,10 +17,11 @@
   "encoder_frozen": false,
   "loss": "cross-entropy with hard Beam targets and soft Typed targets",
   "label_smoothing": 0.0,
-  "source_sampling": "natural proportions; no resampling",
+  "source_sampling": "50:50 Beam/Typed per effective batch; uniform within source",
   "option_shuffling": false,
   "max_sequence_tokens": 1024,
   "question_options_budget_tokens": 256,
   "max_option_tokens": 48,
-  "checkpoint_selection": "mean of Typed validation soft agreement and Beam validation position-balanced accuracy"
+  "validation_objective": "mean of Typed hard accuracy and Beam position-balanced accuracy",
+  "checkpoint_sha256": "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda"
 }

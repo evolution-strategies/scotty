@@ -1,16 +1,7 @@
 {
-  "frozen_snapshot": {
-    "id": "beam-1-esann-2026-10-24-v1",
-    "created_utc": "2026-10-24T23:45:31.325898+00:00",
-    "files": 69,
-    "verified_non_checksum_files": 68
-  },
   "model": {
     "public_name": "Scotty",
-    "historical_public_names": [
-      "Scotty-1"
-    ],
-    "selected_checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
+    "selected_checkpoint_sha256": "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda",
     "checkpoint_in_git": false,
     "base_model": "answerdotai/ModernBERT-large",
     "base_revision": "45bb4654a4d5aaff24dd11d4781fa46d39bf8c13"
@@ -19,19 +10,20 @@
     "huggingface_repo": "DarwinGuru/scotty",
     "repo_type": "model",
     "private": true,
-    "checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
+    "checkpoint_sha256": "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda",
     "checkpoint_in_git": false,
-    "verified_huggingface_commit": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad"
+    "verified_huggingface_commit": "6e7e7e69a21eea966469757eba682c1f59e7d8fb"
   },
   "verification": {
-    "smoke_inference_date_pt": "2026-10-26",
+    "status": "verified",
+    "smoke_inference_date_utc": "2026-11-01",
     "download_repo": "DarwinGuru/scotty",
-    "download_revision": "b5d500fd94409a2f404e8d204fcd2dbd0c9200ad",
-    "checkpoint_sha256": "b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783",
-    "environment": "recovered project environment",
-    "accelerator": "NVIDIA GB10",
-    "selected_option": "true",
-    "selected_probability": 0.8872,
+    "download_revision": "6e7e7e69a21eea966469757eba682c1f59e7d8fb",
+    "checkpoint_sha256": "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda",
+    "environment": "Spark / Python 3.12.3 / torch 2.14.1+cu130 / laya 0.3.28",
+    "accelerator": "cpu",
+    "selected_option": "false",
+    "selected_probability": 0.6015,
     "input_tokens": 31,
     "truncated": false,
     "training_rerun": false
@@ -45,7 +37,7 @@
     "row_level_predictions_in_git": false
   },
   "paper": {
-    "scotty_pdf_sha256": "3b28464922dafb60847a9ac03d6f0afc861c17bc733ac7ba657092feaf372a65",
+    "scotty_pdf_sha256": "90cea219cdb8c31a9fbe2565cca280264dea3aaaf2191d3e93507aff1740484c",
     "scotty_pages": 6,
     "paper_source_in_git": false
   },

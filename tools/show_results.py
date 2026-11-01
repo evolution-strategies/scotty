@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Print the frozen aggregate headline results."""
+"""Print Scotty's final validation and source-audit results."""
 
 from __future__ import annotations
 
@@ -15,18 +15,20 @@ def pct(value: float) -> str:
 
 
 def main() -> None:
-    metrics = json.loads((ROOT / "results/metrics.json").read_text())
-    model = metrics["scotty_1"]
-    control = metrics["typed_only_matched_updates_control"]
-    rows = [
-        ("Beam holdout, raw", model["beam_protected_holdout"]["raw_accuracy"], control["beam_protected_holdout"]["raw_accuracy"]),
-        ("Beam holdout, balanced", model["beam_protected_holdout"]["position_balanced_accuracy"], control["beam_protected_holdout"]["position_balanced_accuracy"]),
-        ("Typed official, hard", model["typed_official_test"]["hard_accuracy"], control["typed_official_test"]["hard_accuracy"]),
-        ("Typed official, soft", model["typed_official_test"]["soft_teacher_agreement"], control["typed_official_test"]["soft_teacher_agreement"]),
-    ]
-    print(f"{'Evaluation':30} {'Scotty':>10} {'Typed-only':>10}")
-    for label, scotty, typed_only in rows:
-        print(f"{label:30} {pct(scotty):>10} {pct(typed_only):>10}")
+    metrics = json.loads((ROOT / "results/metrics.json").read_text())["scotty"]
+    validation = metrics["three_seed_validation"]
+    audit = metrics["group_safe_source_audit"]
+
+    print("Three-seed validation")
+    print(f"  objective mean ± sample SD: {validation['primary_objective_mean']:.6f} ± {validation['primary_objective_sample_stdev']:.6f}")
+    print(f"  Typed hard mean:            {pct(validation['typed_hard_accuracy_mean'])}")
+    print(f"  Beam balanced mean:         {pct(validation['beam_position_balanced_accuracy_mean'])}")
+    print()
+    print("Group-safe source audit")
+    print(f"  objective:                  {audit['primary_objective']:.6f}")
+    print(f"  Typed hard:                 {pct(audit['typed_hard_accuracy'])} ({audit['typed_correct']}/{audit['typed_decisions']})")
+    print(f"  Beam raw:                   {pct(audit['beam_raw_accuracy'])} ({audit['beam_correct']}/{audit['beam_decisions']})")
+    print(f"  Beam balanced:              {pct(audit['beam_position_balanced_accuracy'])}")
 
 
 if __name__ == "__main__":

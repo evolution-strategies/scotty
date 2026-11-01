@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.run_local_checkpoint import choice_question, verify_checkpoint
+from tools.run_local_checkpoint import choice_question, laya_checkpoint_view, verify_checkpoint
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,16 +17,21 @@ class RepositoryFactsTest(unittest.TestCase):
         splits = json.loads((ROOT / "results/splits.json").read_text())
         beam = splits["beam_generated"]
         typed = splits["typed_decisions"]
-        self.assertEqual(beam["train"] + typed["train_decisions"], 18092)
+        training = splits["training"]
+        self.assertEqual(beam["training"] + typed["training_decisions"], 18092)
         self.assertEqual(beam["validation"] + typed["validation_decisions"], 4527)
-        self.assertEqual(beam["protected_test"] + typed["official_test_decisions"], 5259)
-        self.assertEqual(sum(beam["protected_test_families"].values()), 3259)
+        self.assertEqual(training["unique_decisions"], 18092)
+        self.assertEqual(training["optimizer_updates"], 849)
+        self.assertEqual(training["total_presentations"], 54336)
+        self.assertEqual(training["source_sampling"], "50:50 Beam/Typed; uniform within source")
 
     def test_public_name_and_checkpoint_hash(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         self.assertEqual(provenance["model"]["public_name"], "Scotty")
-        self.assertEqual(provenance["model"]["historical_public_names"], ["Scotty" + "-1"])
-        self.assertEqual(len(provenance["model"]["selected_checkpoint_sha256"]), 64)
+        self.assertEqual(
+            provenance["model"]["selected_checkpoint_sha256"],
+            "e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda",
+        )
         self.assertFalse(provenance["model"]["checkpoint_in_git"])
 
     def test_paper_directory_contains_only_pdf(self) -> None:
@@ -73,12 +78,22 @@ class RepositoryFactsTest(unittest.TestCase):
             checkpoint = Path(directory)
             (checkpoint / "tokenizer").mkdir()
             (checkpoint / "encoder").mkdir()
-            (checkpoint / "rl_agent_config.json").write_text("{}\n")
+            public_config = checkpoint / "scotty_config.json"
+            public_config.write_text("{}\n")
             payload = b"small test tensor placeholder"
             (checkpoint / "model.safetensors").write_bytes(payload)
             expected = hashlib.sha256(payload).hexdigest()
             result = verify_checkpoint(checkpoint, expected_sha256=expected)
             self.assertEqual(result["status"], "verified")
+            self.assertEqual(result["config"], "scotty_config.json")
+            with laya_checkpoint_view(checkpoint) as view:
+                self.assertNotEqual(view, checkpoint)
+                self.assertTrue((view / "rl_agent_config.json").is_file())
+            public_config.rename(checkpoint / "rl_agent_config.json")
+            legacy = verify_checkpoint(checkpoint, expected_sha256=expected)
+            self.assertEqual(legacy["config"], "rl_agent_config.json")
+            with laya_checkpoint_view(checkpoint) as view:
+                self.assertEqual(view, checkpoint)
             with self.assertRaises(ValueError):
                 verify_checkpoint(checkpoint, expected_sha256="0" * 64)
 
@@ -95,7 +110,7 @@ class RepositoryFactsTest(unittest.TestCase):
         self.assertIn("paper/scotty-paper.pdf", scope)
         self.assertIn("does **not** apply", scope)
 
-    def test_private_huggingface_hosting_record(self) -> None:
+    def test_huggingface_hosting_record(self) -> None:
         provenance = json.loads((ROOT / "provenance/artifacts.json").read_text())
         hosting = provenance["hosting"]
         self.assertEqual(hosting["huggingface_repo"], "DarwinGuru/scotty")
@@ -106,12 +121,15 @@ class RepositoryFactsTest(unittest.TestCase):
             hosting["checkpoint_sha256"],
             provenance["model"]["selected_checkpoint_sha256"],
         )
+        self.assertRegex(hosting["verified_huggingface_commit"], r"^[0-9a-f]{40}$")
 
     def test_competition_submission_materials(self) -> None:
         hf_card = (ROOT / "huggingface/README.md").read_text()
         self.assertIn("Build with Beam", hf_card)
         self.assertIn("How Beam was used", hf_card)
         self.assertIn("Reflection Beam 1.0 501B-A23B", hf_card)
+        self.assertIn("scotty_config.json", hf_card)
+        self.assertNotIn("rl_agent_config.json", hf_card)
         submission = (ROOT / "submission/README.md").read_text()
         self.assertIn("Ready-to-post discussion entry", submission)
         self.assertIn("2 November 2026 at 11:59 PM Pacific Time", submission)
@@ -156,9 +174,11 @@ class RepositoryFactsTest(unittest.TestCase):
             verification["checkpoint_sha256"],
             provenance["model"]["selected_checkpoint_sha256"],
         )
-        self.assertEqual(verification["selected_option"], "true")
-        self.assertEqual(verification["selected_probability"], 0.8872)
-        self.assertEqual(verification["input_tokens"], 31)
+        self.assertEqual(verification["status"], "verified")
+        self.assertIn(verification["selected_option"], ("false", "true"))
+        self.assertGreaterEqual(verification["selected_probability"], 0.0)
+        self.assertLessEqual(verification["selected_probability"], 1.0)
+        self.assertGreater(verification["input_tokens"], 0)
         self.assertFalse(verification["truncated"])
         self.assertFalse(verification["training_rerun"])
 

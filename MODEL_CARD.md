@@ -1,65 +1,65 @@
 # Model card: Scotty
 
-## Summary
+## Model
 
-Scotty is a 421,293,827-parameter typed decision model. Its 394,781,696-
-parameter encoder is initialized from `answerdotai/ModernBERT-large` revision
-`45bb4654a4d5aaff24dd11d4781fa46d39bf8c13`; its 26,512,131-parameter head is
-newly initialized at seed 0. The head count includes a 263,938-parameter
-auxiliary action module that is inherited by the format but unused by the
-decision loss.
+Scotty is a 421,293,827-parameter typed decision model:
 
-The decision path adds a learned three-type embedding, applies two norm-first
-Transformer layers (width 1,024; 16 heads; feed-forward width 4,096; dropout
-0.1), and uses one shared scalar scorer over option `[MASK]` positions.
+- ModernBERT-large encoder: 394,781,696 parameters;
+- newly initialized Laya-format head: 26,512,131 parameters;
+- two norm-first Transformer head layers;
+- learned decision-type embedding;
+- one shared scalar scorer over option `[MASK]` positions.
+
+The encoder starts from `answerdotai/ModernBERT-large` revision
+`45bb4654a4d5aaff24dd11d4781fa46d39bf8c13`. Candidates are encoded jointly.
 
 ## Inputs and outputs
 
 Inputs are a state, an instruction, a decision type, and an ordered candidate
-list. Outputs are logits and a normalized probability distribution across the
-candidates. Boolean candidates are canonicalized as false/true. Categorical
-outputs use the highest-probability option. Ordered values may use either the
-argmax option or the probability-weighted expected value.
+list. Outputs are one logit and one softmax score per candidate. The largest
+score selects the answer.
 
-Limits from the frozen configuration:
+Limits:
 
 - full serialized input: 1,024 tokens;
 - instruction plus options: 256 tokens;
-- each option: 48 tokens;
-- candidates are encoded jointly, not independently chunked.
+- each option: 48 tokens.
+
+Softmax scores are not calibrated confidence, and the model does not generate
+reasoning.
 
 ## Training
 
-The mixed training set contains 18,092 decisions: 13,292 Beam-generated hard
-targets and 4,800 Typed Decisions soft targets. Validation contains 4,527
-decisions: 3,327 Beam and 1,200 Typed. AdamW training ran for three epochs and
-849 optimizer updates with micro-batches of 8, eight-step gradient accumulation,
-BF16 autocast, full encoder fine-tuning, and gradient checkpointing.
+Training uses 13,292 Beam-generated hard targets and 4,800 Typed Decisions soft
+targets. Every effective batch contains equal numbers from the two sources,
+sampled uniformly within source.
 
-The selected checkpoint SHA-256 is
-`b7983f2820f46d58038920a860223a1e18826448c1833541f8bc52ba6e3fb783`.
-Weights are not stored in Git. The complete checkpoint is hosted at
-[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty), including
-the encoder and tokenizer files required by the Laya-format loader.
+The reported checkpoint uses seed 0, 849 optimizer updates, effective batch 64,
+BF16 autocast, gradient checkpointing, and full encoder fine-tuning.
+
+Checkpoint SHA-256:
+
+```text
+e79b758aea590bcc4504e6b622c206080a7d1fedc49d572d3a185321b8e2eeda
+```
+
+The complete checkpoint is hosted at
+[`DarwinGuru/scotty`](https://huggingface.co/DarwinGuru/scotty).
 
 ## Intended use
 
-Scotty is a research artifact for studying compact, local, candidate-scoring
-decision interfaces. It is suitable for reproduction work and controlled
-experiments after the checkpoint and separate data have been obtained
-under appropriate terms.
-
-It is not a calibrated autonomous decision-maker. Deployment needs domain
-review, threshold calibration, logging, validated escalation, and checks for
-harmful failure modes.
+Scotty is intended for research and controlled applications that need a choice
+among explicit options: boolean checks, routing, categorization, and ordered
+ratings. Applications must validate their own question wording, option sets,
+and escalation rules.
 
 ## Limitations
 
-- One training seed; intervals describe test-sample uncertainty, not training variability.
-- Tests were retrospectively inspected during the broader project.
-- Both principal data sources are synthetic; unrelated real-world generalization is unknown.
-- Matching optimizer updates does not match tokens or FLOPs.
-- Teacher labels are not guaranteed truth.
-- Raw expected calibration error is 0.1093; no calibration was fitted.
-- The 23.36 ms median measurement is one batch-one, 350-token, four-option case
-  on an NVIDIA GB10 and is not a throughput or matched-LLM claim.
+- Both primary supervision sources are synthetic.
+- Teacher errors and shared biases may be learned.
+- The three-seed result is a small sample.
+- The group-safe audit uses the same source collections as training and is not
+  an external or fresh-distribution test.
+- Scores are not calibrated for deployment.
+- Long inputs can lose information beyond the 1,024-token limit.
+- High-stakes decisions require domain review and human escalation.
