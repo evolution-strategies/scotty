@@ -2,7 +2,8 @@
 
 ## Model
 
-Scotty is a 421,293,827-parameter typed decision model:
+Scotty is a compact, one-pass model trained with Beam-generated data to choose
+among supplied options. Its 421,293,827-parameter architecture comprises:
 
 - ModernBERT-large encoder: 394,781,696 parameters;
 - newly initialized Laya-format head: 26,512,131 parameters;

@@ -12,10 +12,11 @@ tags:
 
 # Scotty
 
-Scotty is a 421-million-parameter model for choosing among supplied options.
-It reads a situation, a question, and all candidate answers together, then
-scores the candidates in one ModernBERT forward pass. It supports boolean,
-categorical, and ordered decisions without generating free-form text.
+Scotty is a compact, 421-million-parameter one-pass decision model trained with
+Beam-generated data. It reads a situation, a question, and all supplied answers
+together, then scores the candidates jointly in one forward pass. Training
+balances Beam-generated and Typed Decisions examples 50:50. The model supports
+boolean, categorical, and ordered decisions without generating free-form text.
 
 - Inference code: [`run_scotty.py`](https://huggingface.co/DarwinGuru/scotty/blob/main/run_scotty.py)
 - Paper: [`paper/scotty-paper.pdf`](https://huggingface.co/DarwinGuru/scotty/blob/main/paper/scotty-paper.pdf)

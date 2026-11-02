@@ -1,8 +1,10 @@
 # Scotty
 
-Scotty is a compact model for decisions with known options. Give it a situation,
-a question, and two or more candidate answers; it scores every candidate in one
-ModernBERT forward pass and returns the best-supported option.
+Scotty is a compact, one-pass decision model trained with Beam-generated data
+for decisions with known options. Give it a situation, a question, and two or
+more candidate answers; it scores every candidate jointly in one forward pass
+and returns the best-supported option. Training balances Beam-generated and
+Typed Decisions examples 50:50.
 
 It is useful for boolean checks, routing, classification, and ordered ratings.
 It does not generate free-form text or hidden reasoning.
