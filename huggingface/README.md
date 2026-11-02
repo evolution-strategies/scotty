@@ -21,6 +21,11 @@ categorical, and ordered decisions without generating free-form text.
 - Paper: [`paper/scotty-paper.pdf`](https://huggingface.co/DarwinGuru/scotty/blob/main/paper/scotty-paper.pdf)
 - Demo: <https://spark-29fd.taile0f6e8.ts.net> (access-controlled)
 
+## Contact
+
+For research questions or demo access, contact Oliver Kramer at
+<oliver.kramer@uni-oldenburg.de>.
+
 ## How it works
 
 Scotty combines a pretrained `answerdotai/ModernBERT-large` encoder with a

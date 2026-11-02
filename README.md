@@ -11,6 +11,11 @@ It does not generate free-form text or hidden reasoning.
 - **Paper:** [`paper/scotty-paper.pdf`](paper/scotty-paper.pdf)
 - **Interactive demo:** <https://spark-29fd.taile0f6e8.ts.net> (access-controlled)
 
+## Contact
+
+For research questions or demo access, contact Oliver Kramer at
+<oliver.kramer@uni-oldenburg.de>.
+
 ## A small example
 
 ```json
